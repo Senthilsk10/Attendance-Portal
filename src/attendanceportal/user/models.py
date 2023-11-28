@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser,User
 
 dept_choices = [
     ("IT", "Information Technology"),
@@ -9,6 +9,11 @@ dept_choices = [
 role_choices = [
     ("Teacher", "Teacher"),
     ("Student", "Student")
+]
+
+request_choices = [
+    ("late","late attendance"),
+    ("leave","request leave")
 ]
 
 sem_choices = [
@@ -22,6 +27,17 @@ sem_choices = [
     (8,"eigth semester"),
 ]
 
+sub_type_choices = [
+    ("theory","Theory"),
+    ("lab","Lab"),
+    ("genral","genral"),
+]
+
+status_choices = [
+    ("present","Present"),
+    ("absent","Absent"),
+]
+
 class User(AbstractUser):
     dept = models.CharField(max_length=10, choices=dept_choices, blank=True, null=True)
     sem = models.IntegerField(choices = sem_choices,blank = True,null = True)
@@ -33,3 +49,39 @@ class User(AbstractUser):
             models.UniqueConstraint(fields=['userid'], name='unique_user_id'),
         ]
 
+
+class subject(models.Model):
+    dept = models.CharField(max_length=45,choices=dept_choices,blank = False,null=False)
+    sem = models.CharField(max_length=10,choices=sem_choices,blank = False,null=False)
+    subject_name = models.CharField(max_length=45,blank=False,null=True)
+    subject_code = models.CharField(max_length=10,blank=False,null=True,unique=True)
+    type = models.CharField(max_length=45,choices=sub_type_choices,blank=False,null=True)
+
+
+class attendance_pool(models.Model):
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    created_by = models.OneToOneField(User, on_delete=models.CASCADE, related_name='attendance_pool')
+    subject = models.ForeignKey(subject,on_delete=models.CASCADE)
+    recieved_attendance = models.IntegerField(blank = True,null = False,default=0)
+    dept = models.CharField(max_length=45,choices=dept_choices,blank = False,null=False)
+    sem = models.CharField(max_length=10,choices=sem_choices,blank = False,null=False)
+    is_alive = models.BooleanField(null=True,blank=False,default=True)
+
+
+    def duration_display(self):
+        return f"{self.start_time.strftime('%H:%M')} - {self.end_time.strftime('%H:%M')}"
+
+class attendance(models.Model):
+    pool = models.ForeignKey(attendance_pool,on_delete=models.CASCADE,blank=False,null=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    student_roll = models.IntegerField(blank=False,null=False)
+    status = models.CharField(max_length=20,choices=status_choices,default="absent",blank=False,null=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+
+class request(models.Model):
+    pool = models.ForeignKey(attendance_pool,on_delete=models.CASCADE,blank=False,null=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    student_roll = models.IntegerField(blank=False,null=False)
+    request_type = models.CharField(max_length=25,choices = request_choices,blank=False,null=False)
