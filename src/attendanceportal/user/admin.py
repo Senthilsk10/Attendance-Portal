@@ -22,7 +22,7 @@ from .models import User
 #admin.site.register(User, UserAdmin)
 
 fields = list(UserAdmin.fieldsets)
-fields[1] = ("personal info",{'fields':("first_name","last_name","email","dept","role","userid")})
+fields[1] = ("personal info",{'fields':("first_name","last_name","email","dept","role","userid","sem")})
 UserAdmin.fieldsets = tuple(fields)
 
 admin.site.register(User,UserAdmin)
