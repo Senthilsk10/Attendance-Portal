@@ -20,7 +20,7 @@ from django.contrib.auth.views import LoginView
 from django.views import View
 from user.views import Base_view
 urlpatterns = [
-    path(" ", Base_view.as_view(),name = "index"),
+    path("", Base_view.as_view(),name = "index"),
     path("admin/", admin.site.urls),
     path('Users/',include('user.urls'),name = 'login'),
 ]
