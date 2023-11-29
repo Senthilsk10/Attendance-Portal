@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser,User
+from datetime import date
 
 dept_choices = [
     ("IT", "Information Technology"),
@@ -52,11 +53,13 @@ class User(AbstractUser):
 
 class subject(models.Model):
     dept = models.CharField(max_length=45,choices=dept_choices,blank = False,null=False)
-    sem = models.CharField(max_length=10,choices=sem_choices,blank = False,null=False)
+    sem = models.IntegerField(choices=sem_choices,blank = False,null=False)
     subject_name = models.CharField(max_length=45,blank=False,null=True)
     subject_code = models.CharField(max_length=10,blank=False,null=True,unique=True)
     type = models.CharField(max_length=45,choices=sub_type_choices,blank=False,null=True)
 
+    def __str__(self):
+        return self.subject_code
 
 class attendance_pool(models.Model):
     start_time = models.TimeField()
@@ -64,10 +67,16 @@ class attendance_pool(models.Model):
     created_by = models.OneToOneField(User, on_delete=models.CASCADE, related_name='attendance_pool')
     subject = models.ForeignKey(subject,on_delete=models.CASCADE)
     recieved_attendance = models.IntegerField(blank = True,null = False,default=0)
-    dept = models.CharField(max_length=45,choices=dept_choices,blank = False,null=False)
-    sem = models.CharField(max_length=10,choices=sem_choices,blank = False,null=False)
     is_alive = models.BooleanField(null=True,blank=False,default=True)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    datefield = models.DateTimeField(auto_now=True)
 
+
+    
+    def __str__(self):
+        return f"{self.subject.subject_code} 's pool"
+        pass
 
     def duration_display(self):
         return f"{self.start_time.strftime('%H:%M')} - {self.end_time.strftime('%H:%M')}"
@@ -79,6 +88,8 @@ class attendance(models.Model):
     status = models.CharField(max_length=20,choices=status_choices,default="absent",blank=False,null=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"{self.pool}"
 
 class request(models.Model):
     pool = models.ForeignKey(attendance_pool,on_delete=models.CASCADE,blank=False,null=False)

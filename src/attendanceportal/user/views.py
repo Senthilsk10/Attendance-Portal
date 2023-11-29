@@ -3,7 +3,7 @@ from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.views import View
 from django.http import HttpResponse
-from .models import User
+from .models import User,attendance_pool
 # Create your views here.
 
 
@@ -28,8 +28,10 @@ class student(View):
 class staffs(View):
     def get(self, request, *args, **kwargs):
         user_id = request.user.userid
+        pool = attendance_pool.objects.get(created_by=request.user)
+        poolid = pool.id
         template_name = "staffs.html"
-        return render(request,template_name, {"user_id":user_id})
+        return render(request,template_name, {"user_id":user_id,"poolid":poolid})
     
 
 class Base_view(View):

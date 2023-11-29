@@ -1,0 +1,3 @@
+added some field and datefield and location field to the pols model and 
+now we are familiar with the models side and view side 
+next one is to create forms forms for specific models
