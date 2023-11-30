@@ -1,0 +1,49 @@
+<!-- your_template.html -->
+<form method="post" action="{% url 'add_atendance_pool' %}">
+    {% csrf_token %}
+
+    <!-- Start Time and End Time -->
+    <label for="start_time">Start Time:</label>
+    <input type="time" name="start_time" required>
+    <br>
+    <label for="end_time">End Time:</label>
+    <input type="time" name="end_time" required>
+    <br>
+    <label for="subject">Subject:</label>
+    <select name="subject" required>
+        {% for subject in subjects %}
+            <option value="{{ subject.id }}">{{ subject.subject_code }}</option>
+        {% endfor %}
+    </select>
+    <br>
+
+    <!-- Other Fields from attendance_pool model -->
+    <!-- Recieved Attendance, Is Alive, Latitude, Longitude 
+    <label for="recieved_attendance">Recieved Attendance:</label>
+    <input type="number" name="recieved_attendance" required>-->
+    <br>
+    <label for="is_alive">Is Alive:</label>
+    <input type="checkbox" name="is_alive" checked>
+    <br>
+    <label for="latitude">Latitude:</label>
+    <input type="text" name="latitude">
+    <br>
+    <label for="longitude">Longitude:</label>
+    <input type="text" name="longitude">
+    <br>
+
+    <!-- User Fields -->
+    <!-- Assuming you want to associate the attendance with the currently logged-in user -->
+    <!-- If you are using Django's built-in authentication, you can access the user using request.user -->
+    <input type="hidden" name="created_by" value="{{ request.user.id }}">
+    <br>
+
+    <!-- Datefield (Automatically set by Django) -->
+    <!-- You can include it if you want to display it or allow the user to modify it 
+    <label for="datefield">Date:</label>
+    <input type="datetime-local" name="datefield" value="{{ timestamp }}" disabled>
+    <br>
+    -->
+
+    <input type="submit" value="Submit">
+</form>

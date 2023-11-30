@@ -64,7 +64,7 @@ class subject(models.Model):
 class attendance_pool(models.Model):
     start_time = models.TimeField()
     end_time = models.TimeField()
-    created_by = models.OneToOneField(User, on_delete=models.CASCADE, related_name='attendance_pool')
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     subject = models.ForeignKey(subject,on_delete=models.CASCADE)
     recieved_attendance = models.IntegerField(blank = True,null = False,default=0)
     is_alive = models.BooleanField(null=True,blank=False,default=True)
