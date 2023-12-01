@@ -23,4 +23,6 @@ urlpatterns = [
     path("", Base_view.as_view(),name = "index"),
     path("admin/", admin.site.urls),
     path('Users/',include('user.urls'),name = 'login'),
+    path("Student/", include('student.urls')),
+    path("Staffs/", include('staff.urls')),
 ]

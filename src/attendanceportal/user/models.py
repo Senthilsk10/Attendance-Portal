@@ -18,6 +18,7 @@ request_choices = [
 ]
 
 sem_choices = [
+    (0,"teacher"),
     (1,"first semester"),
     (2,"second semester"),
     (3,"third semester"),
@@ -43,7 +44,7 @@ class User(AbstractUser):
     dept = models.CharField(max_length=10, choices=dept_choices, blank=True, null=True)
     sem = models.IntegerField(choices = sem_choices,blank = True,null = True)
     role = models.CharField(max_length=10, choices=role_choices, default="Student", blank=False, null=False)
-    userid = models.BigIntegerField(blank = False,null = False)
+    userid = models.BigIntegerField(blank = False,null = True)
 
     class Meta:
         constraints = [
@@ -56,8 +57,8 @@ class subject(models.Model):
     sem = models.IntegerField(choices=sem_choices,blank = False,null=False)
     subject_name = models.CharField(max_length=45,blank=False,null=True)
     subject_code = models.CharField(max_length=10,blank=False,null=True,unique=True)
-    type = models.CharField(max_length=45,choices=sub_type_choices,blank=False,null=True)
-
+    type = models.CharField(max_length=45,choices=sub_type_choices,blank=False,null = False)
+    handling_staff = models.ForeignKey(User,on_delete=models.CASCADE,null = True)#here try to add only the teacher role users so when selecting handling staffs it wont be lenghty and if it possible try to implement the dept and sem table so we can sort out
     def __str__(self):
         return self.subject_code
 
@@ -65,7 +66,7 @@ class attendance_pool(models.Model):
     start_time = models.TimeField()
     end_time = models.TimeField()
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
-    subject = models.ForeignKey(subject,on_delete=models.CASCADE)
+    subject = models.ForeignKey(subject,on_delete=models.CASCADE)#here try to apply the filtering of subjets based on the department or the associating sebjects handled by the staff so the list will be shortened
     recieved_attendance = models.IntegerField(blank = True,null = False,default=0)
     is_alive = models.BooleanField(null=True,blank=False,default=True)
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
@@ -84,7 +85,7 @@ class attendance_pool(models.Model):
 class attendance(models.Model):
     pool = models.ForeignKey(attendance_pool,on_delete=models.CASCADE,blank=False,null=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    student_roll = models.IntegerField(blank=False,null=False)
+    student_roll = models.IntegerField(blank=False,null=False)#think later if it was really mportant because we have user refernce above so..,
     status = models.CharField(max_length=20,choices=status_choices,default="absent",blank=False,null=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 
