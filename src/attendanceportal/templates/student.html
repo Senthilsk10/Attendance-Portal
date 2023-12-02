@@ -2,4 +2,31 @@
 
 {% block content %}
   <h1>your roll no is: {{user_id}}</h1>
+  <h1>here are the pools you're represented</h1>
+  {% for pool in pools %}
+    <div>
+     
+      <div>
+
+        <H2>{{pool}}</H2>
+      </div>
+      <div>
+        <h3>start time : {{pool.start_time}}, end time : {{pool.end_time}}</h3>
+      </div>
+      <div>
+        <h3>
+          subject code : {{pool.subject.subject_code}}<br>
+          subject name : {{pool.subject.subject_name}}<br>
+          handled by : {{pool.subject.handling_staff.username}}<br>
+        </h3>
+      </div>
+      <div>
+        <a href = "{% url 'student_pool_view' pk=pool.id %}">go to pool</a>
+      </div>
+      <br>
+      <br>
+      <hr>
+      <hr>
+      </div>
+    {% endfor %}
 {% endblock %}

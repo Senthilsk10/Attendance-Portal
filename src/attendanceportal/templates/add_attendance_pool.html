@@ -32,18 +32,10 @@
     <input type="text" name="longitude">
     <br>
 
-    <!-- User Fields -->
-    <!-- Assuming you want to associate the attendance with the currently logged-in user -->
-    <!-- If you are using Django's built-in authentication, you can access the user using request.user -->
     <input type="hidden" name="created_by" value="{{ request.user.id }}">
     <br>
 
-    <!-- Datefield (Automatically set by Django) -->
-    <!-- You can include it if you want to display it or allow the user to modify it 
-    <label for="datefield">Date:</label>
-    <input type="datetime-local" name="datefield" value="{{ timestamp }}" disabled>
-    <br>
-    -->
+
 
     <input type="submit" value="Submit">
 </form>

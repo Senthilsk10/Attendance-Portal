@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+        <div>
+                    
+                <H2>{{pool}}</H2>
+            </div>
+            <div>
+                <h3>start time : {{pool.start_time}}, end time : {{pool.end_time}}</h3>
+            </div>
+            <div>
+                <h3>
+                subject code : {{pool.subject.subject_code}}<br>
+                subject name : {{pool.subject.subject_name}}<br>
+                handled by : {{pool.subject.handling_staff.username}}<br>
+                </h3>
+            </div>
+                <br>
+                <br>
+                <hr>
+                <hr>
+        </div>
+
+{% endblock %}
