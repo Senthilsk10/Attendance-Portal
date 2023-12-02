@@ -6,6 +6,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <script>
+            function getCSRFToken() {
+        return $('meta[name="csrf-token"]').attr('content');
+    }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}

@@ -11,6 +11,7 @@
             </div>
             <div>
                 <h3>
+                    pool id : {{pool.id}}
                 subject code : {{pool.subject.subject_code}}<br>
                 subject name : {{pool.subject.subject_name}}<br>
                 handled by : {{pool.subject.handling_staff.username}}<br>
@@ -21,5 +22,65 @@
                 <hr>
                 <hr>
         </div>
+
+        <button id="postButton">mark presence</button>
+
+
+        <hr>
+        <table>
+            <tr>
+                <th>student name</th>
+                <th>student rollno</th>
+                <th>status</th>
+                <th>timestamp</th>
+            </tr>
+            {% for data in result_data %}
+            <tr>
+                <td>{{data.user.username}}</td>
+                <td>{{data.user.userid}}</td>
+                <td>{{data.status}}</td>
+                <td>{{data.timestamp}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+
+        <script>
+            // Function to make a POST request
+            function makePostRequest() {
+              // Data to be sent in the POST request
+              var pool_id = {{pool.id}};
+              var headers = {
+                    'X-CSRFToken': getCSRFToken()
+                };  
+              // Make the POST request using jQuery.ajax()
+              $.ajax({
+                type: 'POST',
+                url: "{%url 'mark_presence' %}", // Replace with your API endpoint
+                data: {"pool_id":pool_id},
+                headers:headers,
+                success: function(response) {
+                  console.log('POST request successful', response);
+                  // Handle the response here
+                },
+                error: function(error) {
+                  console.error('Error in POST request', error);
+                  // Handle the error here
+                }
+              });
+            }
+          
+            // Attach a click event to the button
+            $(document).ready(function() {
+              $('#postButton').click(function() {
+                makePostRequest();
+              });
+            });
+          </script>
+
+
+        
+
+
 
 {% endblock %}
