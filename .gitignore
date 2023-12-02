@@ -1,7 +1,0 @@
-
-# Django
-*.sqlite3
-
-# Virtual Environment
-myvenv/
-
