@@ -25,6 +25,10 @@
 
         <button id="postButton">mark presence</button>
 
+        <br><hr>
+        <button id="refreshbtn">mark presence</button>
+        <hr>
+
 
         <hr>
         <table>
@@ -77,6 +81,40 @@
               });
             });
           </script>
+
+
+<script>
+  // Function to make a POST request
+  function check_access() {
+    // Data to be sent in the POST request
+    var pool_id = {{pool.id}};
+    var headers = {
+          'X-CSRFToken': getCSRFToken()
+      };  
+    // Make the POST request using jQuery.ajax()
+    $.ajax({
+      type: 'POST',
+      url: "{%url 'check_access' %}", // Replace with your API endpoint
+      data: {"pool_id":pool_id},
+      headers:headers,
+      success: function(data) {
+        console.log(data.roll, data.ip);
+        // Handle the response here
+      },
+      error: function(error) {
+        console.error('Error in POST request', error);
+        // Handle the error here
+      }
+    });
+  }
+
+  // Attach a click event to the button
+  $(document).ready(function() {
+    $('#refreshbtn').click(function() {
+      check_access();
+    });
+  });
+</script>
 
 
         

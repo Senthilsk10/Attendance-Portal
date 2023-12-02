@@ -87,6 +87,7 @@ class attendance(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     student_roll = models.IntegerField(blank=False,null=False)#think later if it was really mportant because we have user refernce above so..,
     status = models.CharField(max_length=20,choices=status_choices,default="absent",blank=False,null=False)
+    ip_address = models.GenericIPAddressField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
