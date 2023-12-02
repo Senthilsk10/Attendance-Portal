@@ -1,14 +1,7 @@
-# .gitignore
-
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
 
 # Django
 *.sqlite3
 
 # Virtual Environment
 myvenv/
-venv/
+
