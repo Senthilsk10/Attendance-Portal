@@ -28,6 +28,7 @@
         <br><hr>
         <button id="refreshbtn">mark presence</button>
         <hr>
+        <p id = "message"></p>
 
 
         <hr>
@@ -98,7 +99,12 @@
       data: {"pool_id":pool_id},
       headers:headers,
       success: function(data) {
-        console.log(data.roll, data.ip);
+        console.log(data.roll_message, data.ip_message,data.user_ip);
+        document.getElementById('message').innerHTML = `
+    <strong>Roll Number Message:</strong> ${data.roll_message}<br>
+    <strong>IP Address Message:</strong> ${data.ip_message}<br>
+    <strong>User IP:</strong> ${data.user_ip}
+`;
         // Handle the response here
       },
       error: function(error) {

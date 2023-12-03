@@ -59,21 +59,31 @@ def get_client_ip(request):
 
     return str(ip_address)
 
+from django.http import JsonResponse
+
 def check_access(request):
     if request.method == "POST":
-        userip = get_client_ip(request)
+        user_ip = get_client_ip(request)
         user_id = request.user.userid
-        pool = request.POST.get('pool_id')
-        pool_userid_obj = attendance.objects.filter(id = pool,user__userid = user_id,)
-        pool_userip_obj = attendance.objects.filter(id = pool,ip_address = userip,)
-        rollno_check = 1 if pool_userid_obj else 0  
-        ip_check = 1 if pool_userip_obj else 0
-        data = {
-            "roll":rollno_check,
-            "ip":ip_check
-        }
-        
-        return JsonResponse(data,status = 200,safe = False)
+        pool_id = request.POST.get('pool_id')
 
+        # Check if the user with the given user ID exists in the pool
+        pool_userid_obj = attendance.objects.filter(pool__id=pool_id, user__userid=user_id).exists()
+
+        # Check if the user with the given IP address exists in the pool
+        pool_userip_obj = attendance.objects.filter(pool__id=pool_id, ip_address=user_ip).exists()
+
+        # Define messages based on the conditions
+        rollno_message = "User with the provided Roll Number is present." if pool_userid_obj else "User not found in the pool."
+        ip_message = "User with the provided IP Address is present." if pool_userip_obj else "IP Address not found in the pool."
+
+        # Prepare the response data with messages
+        data = {
+            "roll_message": rollno_message,
+            "ip_message": ip_message,
+            "user_ip": user_ip,
+        }
+
+        return JsonResponse(data, status=200, safe=False)
 
         

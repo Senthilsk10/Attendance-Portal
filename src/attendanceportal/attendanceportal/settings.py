@@ -26,7 +26,8 @@ SECRET_KEY = "django-insecure-girm(ro)2l_3-u=5+4n4&c0k)nk&#_s(-x=9uffhzqn%xd^xxy
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost','192.168.43.59']
+#ALLOWED_HOSTS = []
 
 
 # Application definition
