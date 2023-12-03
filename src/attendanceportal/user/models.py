@@ -76,7 +76,7 @@ class attendance_pool(models.Model):
 
     
     def __str__(self):
-        return f"{self.subject.subject_code} 's pool"
+        return f"{self.subject.subject_code} on {self.datefield}"
         pass
 
     def duration_display(self):
@@ -91,7 +91,7 @@ class attendance(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.pool}"
+        return f"{self.user.username} - for {self.pool}"
 
 class request(models.Model):
     pool = models.ForeignKey(attendance_pool,on_delete=models.CASCADE,blank=False,null=False)

@@ -74,8 +74,8 @@ def check_access(request):
         pool_userip_obj = attendance.objects.filter(pool__id=pool_id, ip_address=user_ip).exists()
 
         # Define messages based on the conditions
-        rollno_message = "User with the provided Roll Number is present." if pool_userid_obj else "User not found in the pool."
-        ip_message = "User with the provided IP Address is present." if pool_userip_obj else "IP Address not found in the pool."
+        rollno_message = "flase" if pool_userid_obj else "true"
+        ip_message = "false" if pool_userip_obj else "true"
 
         # Prepare the response data with messages
         data = {
