@@ -50,18 +50,28 @@
             {% endfor %}
         </table>
 
+        <hr>
+        <form id="yourForm">
+          <select id="requestType">
+              <option value="leave">Leave</option>
+              <option value="lateAttendance">Late Attendance</option>
+          </select>
+      
+          <button type="button" id="submitButton">Submit</button>
+      </form>
+      
+            
+        <hr>
+
+
         <script>
           var headers = {
               'X-CSRFToken': getCSRFToken()
             };
-            var pool_id = {{ pool.id }};
+            var pool_id = {{pool.id}};
         
-          // Function to make a POST request
+        
           function makePostRequest() {
-            // Data to be sent in the POST request
-            
-            
-            // Make the POST request using jQuery.ajax()
             $.ajax({
               type: 'POST',
               url: "{% url 'mark_presence' %}", // Replace with your URL pattern name
@@ -81,11 +91,6 @@
         
           // Function to check access and update messages
           function checkAccessAndUpdateMessages() {
-            // Data to be sent in the POST request
-            
-            
-        
-            // Make the POST request using jQuery.ajax()
             $.ajax({
               type: 'POST',
               url: "{% url 'check_access' %}", // Replace with your URL pattern name
@@ -93,10 +98,6 @@
               headers: headers,
               success: function (data) {
                 console.log(data);
-        
-                // Update the HTML with the response data
-                
-        
                 // Check if "message" and "true" are present in the response
                 if (data.roll_message === "true" && data.ip_message === "true") {
                   // If both conditions are true, show the Post button
@@ -134,7 +135,7 @@
               },
               error: function (error) {
                 console.error('Error in POST request', error);
-                // Handle the error here
+                
               }
             });
           }
@@ -179,7 +180,51 @@
             updateTable();
           });
 
+          var checkpointRequestUrl = "{% url 'checkpoint_request' pk=pool.id %}";
 
+          function check_access_for_request() {
+            $.ajax({
+              
+              url:checkpointRequestUrl,  
+              type: 'POST',
+              headers:headers,
+              success: function (data) {
+                console.log("message for request checking : " + data.message);
+                if(data.message == "true"){
+                  $('#yourForm').hide();
+                }
+              }
+            });
+          }
+
+          $(document).ready(function () {
+            check_access_for_request();
+          });
+
+          $(document).ready(function () {
+            $("#submitButton").on("click", function () {
+                var selectedRequestType = $("#requestType").val();
+                var data = {
+                    requestType: selectedRequestType
+                };
+                var url = "{% url 'save_request' pk=pool.id %}";
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    headers:headers,
+                    data: data,
+                    success: function (data) {
+                        console.log("Request successful:", data.message);
+                        check_access_for_request();
+                    },
+                    error: function (error) {
+                        console.error("Error:", error);
+                    }
+                });
+            });
+        });
+
+          
         </script>
         
 

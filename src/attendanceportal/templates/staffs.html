@@ -6,7 +6,9 @@
   <h1>your staff id is: {{user_id}}</h1>
   <h1>you have created a pool with id: {{poolid}}</h1>
 
+  <h3>pools created in this week</h3>
   {% for pool in pools %}
+
   <h1>you have created a pool with id: {{pool.id}}</h1>
   <h1>you have created a pool with created user: {{pool.created_by}}</h1>
   <h1>you have created a pool for the subject: {{pool.subject.subject_code}}</h1>
@@ -14,9 +16,8 @@
   {% endfor %}
 <br>
 <hr>
-<hr>
 <br>
-
+<h3>pools created in this month</h3>
   {% for pool in past_pools %}
   <h1>you have created a pool with id: {{pool.id}}</h1>
   <h1>you have created a pool with created user: {{pool.created_by}}</h1>

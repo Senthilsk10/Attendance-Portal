@@ -93,8 +93,9 @@ class attendance(models.Model):
     def __str__(self):
         return f"{self.user.username} - for {self.pool}"
 
-class request(models.Model):
+class attendance_request(models.Model):
     pool = models.ForeignKey(attendance_pool,on_delete=models.CASCADE,blank=False,null=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     student_roll = models.IntegerField(blank=False,null=False)
     request_type = models.CharField(max_length=25,choices = request_choices,blank=False,null=False)
+    ip_address = models.GenericIPAddressField()

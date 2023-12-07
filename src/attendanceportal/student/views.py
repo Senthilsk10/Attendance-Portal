@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.template.loader import render_to_string
-from user.models import User,attendance_pool,subject,attendance
+from user.models import User,attendance_pool,subject,attendance,attendance_request
 from django.views import View
 from django.http import JsonResponse
 import ipaddress
@@ -76,18 +76,10 @@ def check_access(request):
         user_ip = get_client_ip(request)
         user_id = request.user.userid
         pool_id = request.POST.get('pool_id')
-
-        # Check if the user with the given user ID exists in the pool
         pool_userid_obj = attendance.objects.filter(pool__id=pool_id, user__userid=user_id).exists()
-
-        # Check if the user with the given IP address exists in the pool
         pool_userip_obj = attendance.objects.filter(pool__id=pool_id, ip_address=user_ip).exists()
-
-        # Define messages based on the conditions
-        rollno_message = "flase" if pool_userid_obj else "true"
+        rollno_message = "false" if pool_userid_obj else "true"
         ip_message = "false" if pool_userip_obj else "true"
-
-        # Prepare the response data with messages
         data = {
             "roll_message": rollno_message,
             "ip_message": ip_message,
@@ -105,3 +97,38 @@ def update_table_data(request):
         html_content = render_to_string('attendance_table_partial.html', {'result_data': result_data},request)
 
         return JsonResponse({'html_content': html_content})
+
+
+def get_request(request,*args,**kwargs):
+    if request.method == 'POST':    
+        pk = kwargs.get('pk')
+        current_pool = attendance_pool.objects.get(id = pk)
+        ip = get_client_ip(request)
+        request_string = request.POST.get("requestType")
+
+        request_data = attendance_request(
+            pool = current_pool,
+            user = request.user,
+            student_roll = request.user.userid,
+            request_type = request_string,
+            ip_address = ip
+        )
+
+        request_data.save()
+        data = {
+            "message":"sent successfully"
+        }
+        return JsonResponse(data,status = 200)
+
+        
+def checkpoint_request(request,*args,**kwargs):
+    if request.method == 'POST':    
+        pk = kwargs.get('pk')
+        roll_present_in_pool = attendance_request.objects.filter(pool__id=pk, user__userid=request.user.userid).exists()
+        message = "true" if roll_present_in_pool else "false"
+
+        data= {
+            "message":message
+        }
+
+        return JsonResponse(data,status=200)

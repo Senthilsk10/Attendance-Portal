@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User,subject,attendance_pool,attendance,request
+from .models import User,subject,attendance_pool,attendance,attendance_request
 
 
 #
@@ -29,4 +29,4 @@ admin.site.register(User,UserAdmin)
 admin.site.register(subject)
 admin.site.register(attendance_pool)
 admin.site.register(attendance)
-admin.site.register(request)
+admin.site.register(attendance_request)

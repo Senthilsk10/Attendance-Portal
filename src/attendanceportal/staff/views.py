@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from user.models import attendance_pool,User,subject,attendance
 from django.utils import timezone
 from datetime import timedelta
+from student.views import get_client_ip
 
 # to calculate the recent data and past data for separate view
 today = timezone.now().date()
@@ -19,7 +20,7 @@ class staffs(View):
     def get(self, request, *args, **kwargs):
         user_id = request.user.userid
         current_week_data = attendance_pool.objects.filter(datefield__range=[this_week_start, this_week_end],created_by=request.user)
-        current_month_data = attendance_pool.objects.filter(datefield__range=[this_month_start, this_month_end])
+        current_month_data = attendance_pool.objects.filter(datefield__range=[this_month_start, this_month_end],created_by=request.user)
         #pools = attendance_pool.objects.filter(created_by=request.user)
         template_name = "staffs.html"
         return render(request,template_name, {"user_id":user_id,"pools":current_week_data,"past_pools":current_month_data})
@@ -68,3 +69,7 @@ class staffs_pool_view(View):
         result_data = attendance.objects.filter(pool = current_pool)
         template_name = "staff_pool_view.html"
         return render(request,template_name, {"this_week_pool":current_pool,"result_data":result_data})
+
+
+
+ 
