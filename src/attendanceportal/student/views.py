@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect
+from django.template.loader import render_to_string
 from user.models import User,attendance_pool,subject,attendance
 from django.views import View
 from django.http import JsonResponse
@@ -87,3 +88,11 @@ def check_access(request):
         return JsonResponse(data, status=200, safe=False)
 
         
+def update_table_data(request):
+    if request.method == "POST":
+        pk = request.POST.get('pk')
+        current_pool = attendance_pool.objects.get(id = pk)
+        result_data = attendance.objects.filter(pool = current_pool)
+        html_content = render_to_string('attendance_table_partial.html', {'result_data': result_data},request)
+
+        return JsonResponse({'html_content': html_content})

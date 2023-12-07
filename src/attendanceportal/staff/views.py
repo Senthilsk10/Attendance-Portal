@@ -45,5 +45,5 @@ def create_attendance_pool(request):
 
         return redirect('staffs')  # Redirect to a success page or another URL
 
-    subjects = subject.objects.all()
+    subjects = subject.objects.filter(handling_staff = request.user)
     return render(request, 'add_attendance_pool.html',{"subjects":subjects})

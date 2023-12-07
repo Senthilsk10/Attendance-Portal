@@ -32,7 +32,8 @@
 
 
         <hr>
-        <table>
+        <button id = "refresh-data">refresh</button>
+        <table id = "attendance_result">
             <tr>
                 <th>student name</th>
                 <th>student rollno</th>
@@ -50,14 +51,16 @@
         </table>
 
         <script>
+          var headers = {
+              'X-CSRFToken': getCSRFToken()
+            };
+            var pool_id = {{ pool.id }};
+        
           // Function to make a POST request
           function makePostRequest() {
             // Data to be sent in the POST request
-            var pool_id = {{ pool.id }};
-            var headers = {
-              'X-CSRFToken': getCSRFToken()
-            };
-        
+            
+            
             // Make the POST request using jQuery.ajax()
             $.ajax({
               type: 'POST',
@@ -79,10 +82,8 @@
           // Function to check access and update messages
           function checkAccessAndUpdateMessages() {
             // Data to be sent in the POST request
-            var pool_id = {{ pool.id }};
-            var headers = {
-              'X-CSRFToken': getCSRFToken()
-            };
+            
+            
         
             // Make the POST request using jQuery.ajax()
             $.ajax({
@@ -153,6 +154,32 @@
               
             });
           });
+
+          function updateTable() {
+            $.ajax({
+              url: '{% url "GetTableData" %}',  // Change this to the actual URL
+              type: 'POST',
+              headers:headers,
+              data:{"pk":pool_id},
+              success: function (data) {
+                // Update the table with new data
+                $('#attendance_result tbody').html(data.html_content);
+                console.log(data.html_content)
+              }
+            });
+          }
+
+          // Update the table on page load
+          $(document).ready(function () {
+            updateTable();
+          });
+
+          // Handle refresh button click
+          $('#refresh-data').click(function () {
+            updateTable();
+          });
+
+
         </script>
         
 

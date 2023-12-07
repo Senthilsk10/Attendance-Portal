@@ -1,0 +1,15 @@
+
+<tr>
+    <th>student name</th>
+    <th>student rollno</th>
+    <th>status</th>
+    <th>timestamp</th>
+</tr>
+{% for data in result_data %}
+<tr>
+    <td>{{ data.user.username }}</td>
+    <td>{{ data.user.userid }}</td>
+    <td>{{ data.status }}</td>
+    <td>{{ data.timestamp }}</td>
+</tr>
+{% endfor %}
