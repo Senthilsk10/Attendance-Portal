@@ -1,16 +1,28 @@
 from django.shortcuts import render
 from django.views import View
 from django.http import HttpResponse
-from user.models import attendance_pool,User,subject
-# Create your views here.
+from user.models import attendance_pool,User,subject,attendance
+from django.utils import timezone
+from datetime import timedelta
+
+# to calculate the recent data and past data for separate view
+today = timezone.now().date()
+
+this_week_start = today - timedelta(days=today.weekday())
+this_week_end = this_week_start + timedelta(days=6)
+
+this_month_start = today.replace(day=1)
+this_month_end = (today.replace(day=1) + timedelta(days=32)).replace(day=1) - timedelta(days=1)
+
 
 class staffs(View):
     def get(self, request, *args, **kwargs):
         user_id = request.user.userid
-        pools = attendance_pool.objects.filter(created_by=request.user)
-        #poolid = pool.id
+        current_week_data = attendance_pool.objects.filter(datefield__range=[this_week_start, this_week_end],created_by=request.user)
+        current_month_data = attendance_pool.objects.filter(datefield__range=[this_month_start, this_month_end])
+        #pools = attendance_pool.objects.filter(created_by=request.user)
         template_name = "staffs.html"
-        return render(request,template_name, {"user_id":user_id,"pools":pools})
+        return render(request,template_name, {"user_id":user_id,"pools":current_week_data,"past_pools":current_month_data})
 
 
 def create_attendance_pool(request):
@@ -47,3 +59,12 @@ def create_attendance_pool(request):
 
     subjects = subject.objects.filter(handling_staff = request.user)
     return render(request, 'add_attendance_pool.html',{"subjects":subjects})
+
+
+class staffs_pool_view(View):
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        current_pool = attendance_pool.objects.get(id = pk)
+        result_data = attendance.objects.filter(pool = current_pool)
+        template_name = "staff_pool_view.html"
+        return render(request,template_name, {"this_week_pool":current_pool,"result_data":result_data})

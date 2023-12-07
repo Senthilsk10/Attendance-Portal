@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div>         
+        <H2>{{pool}}</H2>
+    </div>
+    <div>
+        <h3>start time : {{pool.start_time}}, end time : {{pool.end_time}}</h3>
+    </div>
+    <div>
+        <h3>
+            pool id : {{pool.id}}
+        subject code : {{pool.subject.subject_code}}<br>
+        subject name : {{pool.subject.subject_name}}<br>
+        handled by : {{pool.subject.handling_staff.username}}<br>
+        </h3>
+    </div>
+        <br>
+        <br>
+        <hr>
+
+    <button id = "refresh-data">refresh</button>
+    <table id = "attendance_result">
+        <tr>
+            <th>student name</th>
+            <th>student rollno</th>
+            <th>status</th>
+            <th>timestamp</th>
+        </tr>
+        {% for data in result_data %}
+        <tr>
+            <td>{{data.user.username}}</td>
+            <td>{{data.user.userid}}</td>
+            <td>{{data.status}}</td>
+            <td>{{data.timestamp}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+  
+    <script>
+        function updateTable() {
+            $.ajax({
+              url: '{% url "GetTableData" %}',  
+              type: 'POST',
+              headers:headers,
+              data:{"pk":pool_id},
+              success: function (data) {
+                // Update the table with new data
+                $('#attendance_result tbody').html(data.html_content);
+                console.log(data.html_content)
+              }
+            });
+          }
+
+          // Update the table on page load
+          $(document).ready(function () {
+            updateTable();
+          });
+
+          // Handle refresh button click
+          $('#refresh-data').click(function () {
+            updateTable();
+          });
+    </script>
+
+{% endblock %}

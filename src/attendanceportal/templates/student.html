@@ -3,6 +3,8 @@
 {% block content %}
   <h1>your roll no is: {{user_id}}</h1>
   <h1>here are the pools you're represented</h1>
+  {% if pools%}
+    
   {% for pool in pools %}
     <div>
      
@@ -29,4 +31,7 @@
       <hr>
       </div>
     {% endfor %}
+  {% else %}
+    <h2>you currently doesnt have any attendances pool going on</h2>
+  {% endif %}
 {% endblock %}

@@ -10,7 +10,20 @@
   <h1>you have created a pool with id: {{pool.id}}</h1>
   <h1>you have created a pool with created user: {{pool.created_by}}</h1>
   <h1>you have created a pool for the subject: {{pool.subject.subject_code}}</h1>
+  <a href = "{% url 'staffs_pool_view' pk=pool.id %}">go to pool</a>
   {% endfor %}
+<br>
+<hr>
+<hr>
+<br>
+
+  {% for pool in past_pools %}
+  <h1>you have created a pool with id: {{pool.id}}</h1>
+  <h1>you have created a pool with created user: {{pool.created_by}}</h1>
+  <h1>you have created a pool for the subject: {{pool.subject.subject_code}}</h1>
+  <a href = "{% url 'staffs_pool_view' pk=pool.id %}">go to pool</a>
+  {% endfor %}
+
 
   <a href = '{% url 'add_atendance_pool' %}'>add a new pool here</a>
 

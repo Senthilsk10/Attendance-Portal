@@ -4,13 +4,22 @@ from user.models import User,attendance_pool,subject,attendance
 from django.views import View
 from django.http import JsonResponse
 import ipaddress
-# Create your views here.
+from django.utils import timezone
+from datetime import timedelta
+
+
+today = timezone.now().date()
+
+this_week_start = today - timedelta(days=today.weekday())
+this_week_end = this_week_start + timedelta(days=6)
+
+
 class student(View):
     def get(self, request, *args, **kwargs):
         user_id = request.user.userid
         user_dept = request.user.dept
         user_sem = request.user.sem
-        current_pools =attendance_pool.objects.filter(subject__dept = user_dept,subject__sem = user_sem)
+        current_pools =attendance_pool.objects.filter(datefield__range=[this_week_start, this_week_end],subject__dept = user_dept,subject__sem = user_sem)
         template_name = "student.html"
         return render(request,template_name, {"user_id":user_id,"pools":current_pools})
 
