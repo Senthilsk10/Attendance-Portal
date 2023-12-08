@@ -1,10 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.views import View
-from django.http import HttpResponse
-from user.models import attendance_pool,User,subject,attendance
+from django.http import HttpResponse,JsonResponse
+from user.models import attendance_pool,User,subject,attendance,attendance_request
 from django.utils import timezone
 from datetime import timedelta
 from student.views import get_client_ip
+from django.template.loader import render_to_string
 
 # to calculate the recent data and past data for separate view
 today = timezone.now().date()
@@ -67,9 +68,15 @@ class staffs_pool_view(View):
         pk = kwargs.get('pk')
         current_pool = attendance_pool.objects.get(id = pk)
         result_data = attendance.objects.filter(pool = current_pool)
+        
         template_name = "staff_pool_view.html"
-        return render(request,template_name, {"this_week_pool":current_pool,"result_data":result_data})
+        return render(request,template_name, {"pool":current_pool,"result_data":result_data})
 
 
+def get_requests(request,*args,**kwargs):
+    pk = kwargs.get('pk')
+    result_data = attendance_request.objects.filter(pool = pk)
+    html_content = render_to_string('requests_objects_partial.html', {'requests': result_data},request)
 
+    return JsonResponse({'html_content': html_content})
  

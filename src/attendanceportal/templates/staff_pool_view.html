@@ -37,8 +37,19 @@
         </tr>
         {% endfor %}
     </table>
+
+    <div id = "requestSection">
+        <div id = "poolRequests">
+            
+        </div>
+
+    </div>
   
     <script>
+        var headers = {
+              'X-CSRFToken': getCSRFToken()
+            };
+            var pool_id = {{pool.id}};
         function updateTable() {
             $.ajax({
               url: '{% url "GetTableData" %}',  
@@ -46,22 +57,38 @@
               headers:headers,
               data:{"pk":pool_id},
               success: function (data) {
-                // Update the table with new data
+              
                 $('#attendance_result tbody').html(data.html_content);
                 console.log(data.html_content)
               }
             });
           }
 
-          // Update the table on page load
           $(document).ready(function () {
             updateTable();
           });
 
-          // Handle refresh button click
           $('#refresh-data').click(function () {
             updateTable();
           });
+
+
+          function updateRequests() {
+            $.ajax({
+              url: '{% url "get_requests" pk=pool.id %}',
+              type: 'GET',
+              headers:headers,
+              success: function (data) {
+                $('#poolRequests').html(data.html_content);
+                console.log(data.html_content)
+              }
+            });
+          }
+
+          $(document).ready(function () {
+            setInterval(updateRequests,10000);
+          });
+
     </script>
 
 {% endblock %}
