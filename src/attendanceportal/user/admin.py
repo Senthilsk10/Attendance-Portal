@@ -30,3 +30,5 @@ admin.site.register(subject)
 admin.site.register(attendance_pool)
 admin.site.register(attendance)
 admin.site.register(attendance_request)
+
+
