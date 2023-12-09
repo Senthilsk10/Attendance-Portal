@@ -2,6 +2,10 @@
 
 {% block content %}
 
+    
+        <hr>
+        <button id="locationaccess" onclick="getLocation()">mark presence</button>
+        <hr>
         <div>
                     
                 <H2>{{pool}}</H2>
@@ -22,6 +26,7 @@
                 <hr>
                 <hr>
         </div>
+      <div id = "access-div">
 
         <button id="postButton">mark presence</button>
 
@@ -29,8 +34,9 @@
         <button id="refreshbtn">check access</button>
         <hr>
         <p id = "message"></p>
+        
 
-
+      </div>
         <hr>
         <button id = "refresh-data">refresh</button>
         <table id = "attendance_result">
@@ -170,12 +176,12 @@
             });
           }
 
-          // Update the table on page load
+          
           $(document).ready(function () {
             updateTable();
           });
 
-          // Handle refresh button click
+          
           $('#refresh-data').click(function () {
             updateTable();
           });
@@ -224,6 +230,58 @@
             });
         });
 
+
+        var x = document.getElementById("access-div"); // Change "yourContainerID" to the actual ID of the container you want to show
+
+        function getLocation() {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(checkDistance, showError);
+          } else { 
+            x.innerHTML = "Geolocation is not supported by this browser.";
+          }
+        }
+
+        function checkDistance(position) {
+          
+          var targetLatitude = {{pool.latitude}};
+          var targetLongitude = {{pool.longitude}};
+
+          var userLatitude = position.coords.latitude;
+          var userLongitude = position.coords.longitude;
+
+          var distance = Math.sqrt((userLatitude - targetLatitude) ** 2 + (userLongitude - targetLongitude) ** 2);
+          console.log("lattitude = "+ userLatitude + "lonfitude = " + userLongitude)
+          if (distance <= 0.00045) {
+            
+           console.log("you are good to go");
+            
+          } else {
+            
+            console.log("you are not alowed");
+            var x = $("#access-div");
+            x.hide();
+            
+          }
+        }
+
+        function showError(error) {
+          switch(error.code) {
+            case error.PERMISSION_DENIED:
+              x.innerHTML = "User denied the request for Geolocation."
+              break;
+            case error.POSITION_UNAVAILABLE:
+              x.innerHTML = "Location information is unavailable."
+              break;
+            case error.TIMEOUT:
+              x.innerHTML = "The request to get user location timed out."
+              break;
+            case error.UNKNOWN_ERROR:
+              x.innerHTML = "An unknown error occurred."
+              break;
+          }
+        }
+
+        getLocation();
           
         </script>
         
