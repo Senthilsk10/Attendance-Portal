@@ -85,7 +85,7 @@ class attendance_pool(models.Model):
 class attendance(models.Model):
     pool = models.ForeignKey(attendance_pool,on_delete=models.CASCADE,blank=False,null=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    student_roll = models.IntegerField(blank=False,null=False)#think later if it was really mportant because we have user refernce above so..,
+    student_roll = models.IntegerField(blank=False,null=False)#think later if it was really mportant because we have user refernce above so.., / this is the best move so far because when we try to insert the attendance data from the staff then we cant take user from user.username and then use a var forholding it so we can filter it with this i dont tink we could uderstand this later but it was some miracle
     status = models.CharField(max_length=20,choices=status_choices,default="absent",blank=False,null=False)
     ip_address = models.GenericIPAddressField()
     timestamp = models.DateTimeField(auto_now_add=True)

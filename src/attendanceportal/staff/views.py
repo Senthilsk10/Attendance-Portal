@@ -22,14 +22,14 @@ class staffs(View):
         user_id = request.user.userid
         current_week_data = attendance_pool.objects.filter(datefield__range=[this_week_start, this_week_end],created_by=request.user)
         current_month_data = attendance_pool.objects.filter(datefield__range=[this_month_start, this_month_end],created_by=request.user)
-        #pools = attendance_pool.objects.filter(created_by=request.user)
+        
         template_name = "staffs.html"
         return render(request,template_name, {"user_id":user_id,"pools":current_week_data,"past_pools":current_month_data})
 
 
 def create_attendance_pool(request):
     if request.method == 'POST':
-        # Retrieve data from the submitted form
+        
         start_time = request.POST.get('start_time')
         end_time = request.POST.get('end_time')
         sub_id = int(request.POST.get('subject'))
@@ -39,9 +39,7 @@ def create_attendance_pool(request):
         latitude = float(request.POST.get('latitude'))
         longitude = float(request.POST.get('longitude'))
         created_by_id = request.POST.get('created_by')
-        # You can also get other fields similarly
-
-        # Create a new instance of the attendance_pool model
+        
         attendance_instance = attendance_pool(
             start_time=start_time,
             end_time=end_time,
@@ -51,10 +49,10 @@ def create_attendance_pool(request):
             latitude=latitude,
             longitude=longitude,
             created_by_id=created_by_id,
-            # Set other fields accordingly
+            
         )
 
-        # Save the instance to the database
+        
         attendance_instance.save()
 
         return redirect('staffs')  # Redirect to a success page or another URL
@@ -74,9 +72,49 @@ class staffs_pool_view(View):
 
 
 def get_requests(request,*args,**kwargs):
-    pk = kwargs.get('pk')
-    result_data = attendance_request.objects.filter(pool = pk)
-    html_content = render_to_string('requests_objects_partial.html', {'requests': result_data},request)
+    if request.method == "GET":
+        pk = kwargs.get('pk')
+        result_data = attendance_request.objects.filter(pool = pk)
+        html_content = render_to_string('requests_objects_partial.html', {'requests': result_data},request)
 
-    return JsonResponse({'html_content': html_content})
+        return JsonResponse({'html_content': html_content})
+    else:
+        return JsonResponse("post requests not allowed",status = 400)
  
+
+def post_attendance(request,*args,**kwargs):
+    if request.method == "GET":
+        default_ip = "10.0.0.0"
+        pk = kwargs.get("pk")
+        request_obj = attendance_request.objects.get(id =pk)
+        student = request_obj.user
+        attendance_status = request_obj.request_type
+        user_pool = request_obj.pool
+
+        attendance_data = attendance(
+            pool = user_pool,
+            user = student,
+            student_roll = student.userid,
+            status = attendance_status,
+            ip_address = default_ip
+        )
+
+        attendance_data.save()
+        request_obj.delete()
+        data = {
+            "message":"added successfully"
+        }
+        return JsonResponse(data, status=200)
+
+
+def delete_requests(request,*args,**kwargs):
+    if request.method == "POST":
+        pk = kwargs.get("pk")
+        request_obj = attendance_request.objects.get(id=pk)
+        request_obj.delete()
+        data = {
+            "message":"deleted successfully successfully"
+        }
+        return JsonResponse(data, status=200)
+
+    

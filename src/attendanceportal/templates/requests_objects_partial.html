@@ -1,13 +1,16 @@
 {% for request in requests %}
-                
 <div class="card" style="width: 24rem;">
     <div class="card-body">
-      <h5 class="card-title">request type : {{request.request_type}}</h5>
-      <h6 class="card-subtitle mb-2 text-muted">student name : {{request.user.username}}</h6>
-      <p class="card-text">student roll number : {{request.user.userid}}</p>
-      <a href="#" class="card-link">Card link</a>
-      <a href="#" class="card-link">Another link</a>
+        <h6 class="card-subtitle">request type: {{request.request_type}}</h6>
+        <h6 class="card-subtitle mb-2 text-muted">student name: {{request.user.username}}</h6>
+        <p class="card-text">student roll number: {{request.user.userid}}</p>
+        <button type="button" class="btn btn-success accept-request"
+                value="{% url 'addRequestByStaff' pk=request.id %}">Accept</button>
+        <button type="button" class="btn btn-danger reject-request"
+                value="{% url 'delete_requests' pk=request.id %}">Reject</button>
     </div>
-  </div>
-
+</div>
 {% endfor %}
+
+
+
