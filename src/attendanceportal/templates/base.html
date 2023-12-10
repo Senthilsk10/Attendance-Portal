@@ -18,17 +18,14 @@
     {% bootstrap_javascript %}
 </head>
 <body>
-    <div class = "container-fluid">
-            <nav class="navbar  navbar-light bg-light">
-                <a class="navbar-brand" href="#">
-                  <img src="https://github.com/Senthilsk10/Attendance-Portal/blob/main/Attendance%20portal.png?raw=true" width="30" height="30" class="d-inline-block align-top rounded-circle" alt="">
-                  Attendance Portal
-                </a>
-                {% block login %} {% endblock %}
-                
-              </nav>
-        {% block content %}{% endblock %}
-    </div>
-    
+    <nav class="navbar  navbar-light bg-light mb-3">
+        <div class = "container-fluid">
+            <a class="navbar-brand" href="#">
+            <img src="https://github.com/Senthilsk10/Attendance-Portal/blob/main/Attendance%20portal.png?raw=true" width="30" height="30" class="d-inline-block align-top rounded-circle" alt="">  Attendance Portal
+            </a>
+            {% block login %} {% endblock %}
+        </div>
+    </nav>        
+        {% block content %}{% endblock %} 
 </body>
 </html>

@@ -1,27 +1,30 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class = "container">
-      <h2>Login</h2>
-      <form method="post" action="{% url 'login' %}" class = "form mx-auto my auto">
-          {% csrf_token %}
-          
-          <div class="form-group">
-              <label for="id_username">Username</label>
-          </div>
-          <div class="form-group">
-              {{ form.username }}
-          </div>
-          
-          <div class="form-group">
-              <label for="id_password">Password</label>
-          </div>
-          <div class="form-group">
-              {{ form.password }}
-          </div>
+    <div class = "container text-center">
+    <div class = "shadow-lg p-3 mt-5 mx-3 bg-white rounded">
+        <form method="post" action="{% url 'login' %}" class = "form-signin mt-4">
+            {% csrf_token %}
 
-          <button type="submit" class="btn btn-primary">Login</button>
-      </form>
+            <img class="mb-4" src="https://github.com/Senthilsk10/my-academic-files/blob/main/login.png?raw=true" alt="login-icon" width="72" height="72">
+            <h1 class="h3 mb-5 font-weight-normal">login with your password</h1>
+            <div class="form-group mb-3">
+                <label for="id_username" class = "sr-only ">Username</label>
+            </div>
+            <div class="form-group mb-3">
+                {{ form.username}}
+            </div>
+            
+            <div class="form-group mb-3">
+                <label for="id_password" class ="sr-only">Password</label>
+            </div>
+            <div class="form-group mb-2">
+                {{ form.password}}
+            </div>
+
+            <button type="submit" class="btn btn-lg btn-block btn-primary mt-4 mb-4" >Login</button>
+        </form>
+    </div>
     </div>
 {% endblock %}
 
