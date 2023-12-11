@@ -13,18 +13,14 @@ today = timezone.now().date()
 this_week_start = today - timedelta(days=today.weekday())
 this_week_end = this_week_start + timedelta(days=6)
 
-this_month_start = today.replace(day=1)
-this_month_end = (today.replace(day=1) + timedelta(days=32)).replace(day=1) - timedelta(days=1)
-
-
 class staffs(View):
     def get(self, request, *args, **kwargs):
         user_id = request.user.userid
-        current_week_data = attendance_pool.objects.filter(datefield__range=[this_week_start, this_week_end],created_by=request.user)
-        current_month_data = attendance_pool.objects.filter(datefield__range=[this_month_start, this_month_end],created_by=request.user)
+        current_week_data = attendance_pool.objects.filter(datefield__range=[this_week_start, this_week_end],created_by=request.user).exclude(datefield=today)
+        today_pools = attendance_pool.objects.filter(datefield=today)
         
         template_name = "staffs.html"
-        return render(request,template_name, {"user_id":user_id,"pools":current_week_data,"past_pools":current_month_data})
+        return render(request,template_name, {"user_id":user_id,"week_pools":current_week_data,"pools":today_pools})
 
 
 def create_attendance_pool(request):

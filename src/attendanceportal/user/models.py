@@ -71,7 +71,7 @@ class attendance_pool(models.Model):
     is_alive = models.BooleanField(null=True,blank=False,default=True)
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
-    datefield = models.DateTimeField(auto_now=True)
+    datefield = models.DateField(auto_now=True)
 
 
     
