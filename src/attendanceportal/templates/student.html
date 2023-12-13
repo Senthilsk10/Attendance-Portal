@@ -1,6 +1,163 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+    <div class ="container  mr-3 mt-1 p-2  rounded">
+          
+      <div class="card-body mx-1 mt-1 shadow">
+        <h1 class="h3 mb-2 font-weight-normal card-title">Personal Information</h1>
+        <hr>
+        <div class="row">
+          <div class="col-sm-3">
+            <p class="mb-0">Name</p>
+          </div>
+          <div class="col-sm-9">
+            <p class="text-muted mb-0">{{request.user.username}}</p>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-3">
+            <p class="mb-0">Roll Number</p>
+          </div>
+          <div class="col-sm-9">
+            <p class="text-muted mb-0">{{request.user.userid}}</p>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-3">
+            <p class="mb-0">Department</p>
+          </div>
+          <div class="col-sm-9">
+            <p class="text-muted mb-0">{{request.user.dept}}</p>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-3">
+            <p class="mb-0">Semester</p>
+          </div>
+          <div class="col-sm-9">
+            <p class="text-muted mb-0">{{request.user.sem}}</p>
+          </div>
+        </div>
+        <hr>
+    </div>
+    </div>
+
+    <hr class = "shadow my-4" >
+
+    <div class="accordion accordion-flush" id="accordionFlushExample">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingOne">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+            <p class="font-weight-normal">sessions you haven't marked for today</p>
+          </button>
+        </h2>
+        <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+          <div class="accordion-body">
+              <div class="container">
+            <div class="row">
+                {% for pool in pools %}
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="card mt-2 mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ pool.subject.subject_name }}</h5>
+                            <p class="card-text">{{ pool.datefield }}</p>
+                            <p class="card-text font-weight-normal">Duration: {{ pool.duration_display }}</p>
+                            <p class="card-text font-weight-normal">Subject Code: {{ pool.subject.subject_code }}</p>
+                            <p class="card-text font-weight-normal">
+                                Semester: {{ pool.subject.sem }} | Department: {{ pool.subject.dept }}
+                            </p>
+                            <p class="card-text font-weight-normal">Pool Status: {{ pool.status }}</p>
+                        </div>
+                        <div class="card-body text-right">
+                            <a class="btn btn-light" href="{% url 'student_pool_view' pk=pool.id %}">Visit session</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>    
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingTwo">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                <p class="font-weight-normal">sessions you have marked for today</p>
+            </button>
+        </h2>
+        <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
+            data-bs-parent="#accordionFlushExample">
+            <div class="accordion-body">
+              <div class="container">
+            <div class="row">
+                {% for pool in marked_pools %}
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="card mt-2 mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ pool.subject.subject_name }}</h5>
+                            <p class="card-text">{{ pool.datefield }}</p>
+                            <p class="card-text font-weight-normal">Duration: {{ pool.duration_display }}</p>
+                            <p class="card-text font-weight-normal">Subject Code: {{ pool.subject.subject_code }}</p>
+                            <p class="card-text font-weight-normal">
+                                Semester: {{ pool.subject.sem }} | Department: {{ pool.subject.dept }}
+                            </p>
+                            <p class="card-text font-weight-normal">Pool Status: {{ pool.status }}</p>
+                        </div>
+                        <div class="card-body text-right">
+                            <a class="btn btn-light" href="{% url 'student_pool_view' pk=pool.id %}">Visit session</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>    
+          </div>
+        </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="flush-headingThree">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+              <p class="font-weight-normal">Sessions from this week</p>
+          </button>
+      </h2>
+      <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree"
+          data-bs-parent="#accordionFlushExample">
+          <div class="accordion-body">
+            <div class="container">
+          <div class="row">
+              {% for pool in week_pools %}
+              <div class="col-lg-4 col-md-6 col-sm-12">
+                  <div class="card mt-2 mb-3">
+                      <div class="card-body">
+                          <h5 class="card-title">{{ pool.subject.subject_name }}</h5>
+                          <p class="card-text">{{ pool.datefield }}</p>
+                          <p class="card-text font-weight-normal">Duration: {{ pool.duration_display }}</p>
+                          <p class="card-text font-weight-normal">Subject Code: {{ pool.subject.subject_code }}</p>
+                          <p class="card-text font-weight-normal">
+                              Semester: {{ pool.subject.sem }} | Department: {{ pool.subject.dept }}
+                          </p>
+                          <p class="card-text font-weight-normal">Pool Status: {{ pool.status }}</p>
+                      </div>
+                      <div class="card-body text-right">
+                          <a class="btn btn-light" href="{% url 'student_pool_view' pk=pool.id %}">Visit session</a>
+                      </div>
+                  </div>
+              </div>
+              {% endfor %}
+          </div>    
+        </div>
+      </div>
+  </div>
+</div>
+      
+
+<!--
   <h1>your roll no is: {{user_id}}</h1>
   <h1>here are the pools you're represented</h1>
   {% if pools%}
@@ -34,4 +191,6 @@
   {% else %}
     <h2>you currently doesnt have any attendances pool going on</h2>
   {% endif %}
+
+  -->
 {% endblock %}

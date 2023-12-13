@@ -69,8 +69,8 @@ class attendance_pool(models.Model):
     subject = models.ForeignKey(subject,on_delete=models.CASCADE)#here try to apply the filtering of subjets based on the department or the associating sebjects handled by the staff so the list will be shortened
     recieved_attendance = models.IntegerField(blank = True,null = False,default=0)
     is_alive = models.BooleanField(null=True,blank=False,default=True)
-    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
-    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
     datefield = models.DateField(auto_now=True)
 
 

@@ -19,9 +19,11 @@ class student(View):
         user_id = request.user.userid
         user_dept = request.user.dept
         user_sem = request.user.sem
-        current_pools =attendance_pool.objects.filter(datefield__range=[this_week_start, this_week_end],subject__dept = user_dept,subject__sem = user_sem)
+        unmarked_current_pool = attendance_pool.objects.filter(datefield=today,subject__dept = request.user.dept,subject__sem = request.user.sem).exclude(attendance__user = request.user)
+        marked_current_pool = attendance_pool.objects.filter(datefield=today,subject__dept = request.user.dept,subject__sem = request.user.sem).exclude(id__in=unmarked_current_pool) 
+        week_pools =attendance_pool.objects.filter(datefield__range=[this_week_start, this_week_end],subject__dept = user_dept,subject__sem = user_sem).exclude(datefield=today)
         template_name = "student.html"
-        return render(request,template_name, {"user_id":user_id,"pools":current_pools})
+        return render(request,template_name, {"user_id":user_id,"pools":unmarked_current_pool,"week_pools":week_pools,"marked_current_pools":marked_current_pool})
 
 class pool_view(View):
     def get(self, request, *args, **kwargs):

@@ -188,10 +188,7 @@
                             <div class="card mt-2 mb-3">
                               <div class="container">
                                 <div class="row">
-                                    {% for pool in week_pools %}
-                                    <div class="col-lg-4 col-md-6 col-sm-12">
-                                        <div class="card mt-2 mb-3">
-                                            <div class="card-body">
+                                    <div class="card-body">
                                                 <h5 class="card-title">{{ pool.subject.subject_name }}</h5>
                                                 <p class="card-text">{{ pool.datefield }}</p>
                                                 <p class="card-text font-weight-normal">Duration: {{ pool.duration_display }}</p>
@@ -206,10 +203,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {% endfor %}
-                                </div>
-                              </div>
-                            </div>
                             </div>
                         </div>
                         {% endfor %}
