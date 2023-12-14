@@ -1,76 +1,170 @@
 {% extends 'base.html' %}
 
+{% block jsscript %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" /> 
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+{% endblock %}
+
+{% block login %}
+<a class="nav-item nav-link ml-3 pl-1 btn btn-light rounded-lg border-info shadow-sm" href="/"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
+  <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5"/>
+</svg> Home   </a>
+{% endblock %}
+
 {% block content %}
 
-    
+    <div class ="container  mr-3 mt-1 p-2  rounded">
+          
+      <div class="card-body mx-1 mt-1 shadow">
+        <h1 class="h3 mb-2 font-weight-normal card-title">SessionInformation</h1>
         <hr>
-        <button id="locationaccess" onclick="getLocation()">mark presence</button>
-        <hr>
-        <div>
-                    
-                <H2>{{pool}}</H2>
-            </div>
-            <div>
-                <h3>start time : {{pool.start_time}}, end time : {{pool.end_time}}</h3>
-            </div>
-            <div>
-                <h3>
-                    pool id : {{pool.id}}
-                subject code : {{pool.subject.subject_code}}<br>
-                subject name : {{pool.subject.subject_name}}<br>
-                handled by : {{pool.subject.handling_staff.username}}<br>
-                </h3>
-            </div>
-                <br>
-                <br>
-                <hr>
-                <hr>
+        <div class="row">
+          <div class="col-sm-3">
+            <p class="mb-0">Subject Name</p>
+          </div>
+          <div class="col-sm-9">
+            <p class="text-muted mb-0">{{pool.subject.subject_name}}</p>
+          </div>
         </div>
-      <div id = "access-div">
-
-        <button id="postButton">mark presence</button>
-
-        <br><hr>
-        <button id="refreshbtn">check access</button>
         <hr>
-        <p id = "message"></p>
+        <div class="row">
+          <div class="col-sm-3">
+            <p class="mb-0">Subject Code</p>
+          </div>
+          <div class="col-sm-9">
+            <p class="text-muted mb-0">{{pool.subject.subject_code}}</p>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-3">
+            <p class="mb-0">Class timings</p>
+          </div>
+          <div class="col-sm-9">
+            <p class="text-muted mb-0">{{pool.duration_display}}</p>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-3">
+            <p class="mb-0">Handling Staff</p>
+          </div>
+          <div class="col-sm-9">
+            <p class="text-muted mb-0">{{pool.subject.handling_staff.username}}</p>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-3">
+            <p class="mb-0">Session date</p>
+          </div>
+          <div class="col-sm-9">
+            <p class="text-muted mb-0">{{pool.datefield}}</p>
+          </div>
+        </div>
+        <hr>
         
-
       </div>
-        <hr>
-        <button id = "refresh-data">refresh</button>
-        <table id = "attendance_result">
-            <tr>
-                <th>student name</th>
-                <th>student rollno</th>
-                <th>status</th>
-                <th>timestamp</th>
-            </tr>
-            {% for data in result_data %}
-            <tr>
-                <td>{{data.user.username}}</td>
-                <td>{{data.user.userid}}</td>
-                <td>{{data.status}}</td>
-                <td>{{data.timestamp}}</td>
-            </tr>
-            {% endfor %}
-        </table>
+    </div>
 
-        <hr>
-        <form id="yourForm">
-          <select id="requestType">
-              <option value="leave">Leave</option>
-              <option value="lateAttendance">Late Attendance</option>
-          </select>
+    <hr class = "shadow my-4">
+
+    <div class = "container text-center" id = "locationContainer" > 
+        <p> check the messages and mark your attendance by clicking below </p>
+        
+        <button type="button" class="btn btn-primary p-2 text-center" data-toggle="modal" data-target="#myModal">
+          open messages
+        </button>
       
-          <button type="button" id="submitButton">Submit</button>
-      </form>
+
+      <div class="modal" id="myModal">
+          <div class="modal-dialog">
+              <div class="modal-content">
       
-            
-        <hr>
+                
+                  <div class="modal-header">
+                      <h4 class="modal-title">Messages</h4>
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </div>
+      
+                  
+                  <div  class="modal-body">
+                    <div class = "text-center my-2">
+                      <p class = "font-weight-normal text-info">location permissions\info : <p id  = "location-info" class = "text-muted"></p></p>
+                    </div>
+                    <div id = "access-div"> 
+                      <hr class = "shadow my-4">
+                      <div id  = "message">
+
+                      </div>
+                      <hr class = "shadow my-4">
+                      <div >
+                        
+                        <button id="postButton" class = "btn btn-light shadow-sm">mark presence</button>
+                      </div>
+                    </div>
+                      
+                  </div>
+      
+                  
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button id="refreshbtn" class="btn btn-info">refresh message</button>
+                  </div>
+      
+              </div>
+          </div>
+      </div>
+
+    </div>
+
+    <hr class = "shadow my-4">
+
+    <div class = "container text-center" id = "requestContainer">
+        
+        <div id = "content_to_hide">
+          <h1 class="h3 mb-2 font-weight-normal card-title">Submit a Request</h1>
+          <form id="yourForm" class = "form">
+            <select id="requestType" class = "form-control my-3">
+                <option class = "form-control" value="leave">Leave</option>
+                <option class = "form-control" value = lateAttendance">Late Attendance</option>
+            </select>
+        
+            <button type="button" id="submitButton" class = "btn btn-primary">Submit</button>
+          </form>
+        </div>
+    </div>
+    
+    <hr class = "shadow my-4">
+
+    <div class = "container my-3 mx-1">
+
+      <button id = "refresh-data" class = "btn btn-info p-2">Refresh table</button>
+
+      <div id = "table-content" class = "my-3 shadow-sm">
+      
+      </div>
+    </div>
+
 
 
         <script>
+          
+          $(document).ready(function () {
+            $('#datatable').DataTable();
+            $('.dataTables_length').addClass('bs-select');
+          });
+          
+
+          var status_str = {{ pool.pool_status }};
+        if (status_str === false) {
+            $("#locationContainer").html('<p class="font-weight-normal">Students are not allowed to mark attendance<br>Try to post a request from the below</p>');
+            
+          }
+
+          
           var headers = {
               'X-CSRFToken': getCSRFToken()
             };
@@ -109,33 +203,57 @@
                   // If both conditions are true, show the Post button
                   $('#postButton').show();
                   document.getElementById('message').innerHTML = `
-                    <strong>Roll Number Message:</strong> ${"You didn't mark your attendance yet"}<br>
-                    <strong>IP Address Message:</strong> ${"Your device is allowed to make the present"}<br>
-                    <strong>User IP:</strong> ${"Your IP address was obtained as: " + data.user_ip}
+                    <div class="row">
+                      <strong class="text-danger">Roll Number Already Exists:</strong> ${"<span class='text-muted'>You didn't mark your attendance yet</span>"}
+                    </div>
+                    <div class="row">
+                      <strong class="text-success">IP Address warning:</strong> ${"<span class='text-muted'>Your device is allowed to make the present</span>"}
+                    </div>
+                    <div class="row">
+                      <strong>your IP:</strong> ${"<span class='text-muted'>Your IP address was obtained as: " + data.user_ip + "</span>"}
+                    </div>
                   `;
                 } else if (data.roll_message === "false" && data.ip_message === "true") {
                   // If Roll number condition is false, but IP condition is true
                   $('#postButton').hide();
                   document.getElementById('message').innerHTML = `
-                    <strong>Roll Number Message:</strong> ${"You already marked your attendance"}<br>
-                    <strong>IP Address Message:</strong> ${"Your device is allowed to make the present"}<br>
-                    <strong>User IP:</strong> ${"Your IP address was obtained as: " + data.user_ip}
+                    <div class="row">
+                      <strong class="text-success">Roll Number Already Exists:</strong> ${"<span class='text-muted'>You already marked your attendance</span>"}
+                    </div>
+                    <div class="row">
+                      <strong class="text-success">IP Address warning:</strong> ${"<span class='text-muted'>Your device is allowed to make the present</span>"}
+                    </div>
+                    <div class="row">
+                      <strong>your IP:</strong> ${"<span class='text-muted'>Your IP address was obtained as: " + data.user_ip + "</span>"}
+                    </div>
                   `;
                 } else if (data.roll_message === "true" && data.ip_message === "false") {
                   // If Roll number condition is true, but IP condition is false
                   $('#postButton').hide();
                   document.getElementById('message').innerHTML = `
-                    <strong>Roll Number Message:</strong> ${"You didn't mark your attendance yet"}<br>
-                    <strong>IP Address Message:</strong> ${" but Your device is not allowed to make the present"}<br>
-                    <strong>User IP:</strong> ${"Your IP address was obtained as: " + data.user_ip}
+                    <div class="row">
+                      <strong class="text-danger">Roll Number Already Exists:</strong> ${"<span class='text-muted'>You didn't mark your attendance yet</span>"}
+                    </div>
+                    <div class="row">
+                      <strong class="text-muted">IP Address warning:</strong> ${"<span class='text-muted'> but Your device is not allowed to make the present</span>"}
+                    </div>
+                    <div class="row">
+                      <strong>your IP:</strong> ${"<span class='text-muted'>Your IP address was obtained as: " + data.user_ip + "</span>"}
+                    </div>
                   `;
                 } else {
                   // If both conditions are false
                   $('#postButton').hide();
                   document.getElementById('message').innerHTML = `
-                    <strong>Roll Number Message:</strong> ${"You already marked your attendance"}<br>
-                    <strong>IP Address Message:</strong> ${"Your device is not allowed to make the present"}<br>
-                    <strong>User IP:</strong> ${"Your IP address was obtained as: " + data.user_ip}
+                    <div class="row">
+                      <strong class="text-success">Roll Number Already Exists:</strong> ${"<span class='text-muted'>You already marked your attendance</span>"}
+                    </div>
+                    <div class="row">
+                      <strong class="text-danger">IP Address warning:</strong> ${"<span class='text-muted'>Your device is not allowed to make the present</span>"}
+                    </div>
+                    <div class="row">
+                      <strong>your IP:</strong> ${"<span class='text-muted'>Your IP address was obtained as: " + data.user_ip + "</span>"}
+                    </div>
                   `;
                 }
               },
@@ -151,6 +269,7 @@
           $(document).ready(function () {
             $('#refreshbtn').click(function () {
               checkAccessAndUpdateMessages();
+              getLocation();
             });
           });
         
@@ -170,7 +289,8 @@
               data:{"pk":pool_id},
               success: function (data) {
                 // Update the table with new data
-                $('#attendance_result tbody').html(data.html_content);
+                //$('#attendance_result tbody').html(data.html_content);
+                $('#table-content').html(data.html_content);
                 console.log(data.html_content)
               }
             });
@@ -184,6 +304,7 @@
           
           $('#refresh-data').click(function () {
             updateTable();
+
           });
 
           var checkpointRequestUrl = "{% url 'checkpoint_request' pk=pool.id %}";
@@ -197,7 +318,7 @@
               success: function (data) {
                 console.log("message for request checking : " + data.message);
                 if(data.message == "true"){
-                  $('#yourForm').hide();
+                  $('#content_to_hide').hide();
                 }
               }
             });
@@ -222,13 +343,16 @@
                     success: function (data) {
                         console.log("Request successful:", data.message);
                         check_access_for_request();
-                    },
+                        $('#requestContainer').html(`<p class = "font-weight-normal alert alert-success">Request has been updated </p>`);
+                       },
                     error: function (error) {
                         console.error("Error:", error);
                     }
                 });
             });
         });
+
+        
 
 
         var x = document.getElementById("access-div"); // Change "yourContainerID" to the actual ID of the container you want to show
@@ -241,42 +365,55 @@
           }
         }
 
-        function checkDistance(position) {
+        function checkDistance(position){
           
           var targetLatitude = {{pool.latitude}};
           var targetLongitude = {{pool.longitude}};
-
+          var targetLatitude = {{pool.latitude}}
           var userLatitude = position.coords.latitude;
           var userLongitude = position.coords.longitude;
 
           var distance = Math.sqrt((userLatitude - targetLatitude) ** 2 + (userLongitude - targetLongitude) ** 2);
-          console.log("lattitude = "+ userLatitude + "lonfitude = " + userLongitude)
+          console.log("lattitude = "+ userLatitude + "lonfitude = " + userLongitude + "distanc = " + distance)
           if (distance <= 0.00045) {
             
            console.log("you are good to go");
+           y.innerHTML = "you are near the class sorroundings";
             
           } else {
             
             console.log("you are not alowed");
+            
+
             var x = $("#access-div");
             x.hide();
+            y.innerHTML = `you're not near the class`;
             
           }
         }
 
+        y = document.getElementById("location-info")
         function showError(error) {
           switch(error.code) {
             case error.PERMISSION_DENIED:
-              x.innerHTML = "User denied the request for Geolocation."
+              y.innerHTML = "User denied the request for Geolocation."
+              var x = $("#access-div");
+              x.hide();
               break;
             case error.POSITION_UNAVAILABLE:
-              x.innerHTML = "Location information is unavailable."
+              y.innerHTML = "Location information is unavailable."
+              var x = $("#access-div");
+              x.hide();
               break;
             case error.TIMEOUT:
-              x.innerHTML = "The request to get user location timed out."
+              y.innerHTML = "The request to get user location timed out."
+              var x = $("#access-div");
+              x.hide();
               break;
             case error.UNKNOWN_ERROR:
-              x.innerHTML = "An unknown error occurred."
+              y.innerHTML = "An unknown error occurred."
+              var x = $("#access-div");
+              x.hide();
               break;
           }
         }

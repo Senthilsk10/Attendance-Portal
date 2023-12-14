@@ -70,7 +70,7 @@
                             <p class="card-text font-weight-normal">
                                 Semester: {{ pool.subject.sem }} | Department: {{ pool.subject.dept }}
                             </p>
-                            <p class="card-text font-weight-normal">Pool Status: {{ pool.status }}</p>
+                            <p class="card-text font-weight-normal">Pool Status: {{ pool.is_alive }}</p>
                         </div>
                         <div class="card-body text-right">
                             <a class="btn btn-light" href="{% url 'student_pool_view' pk=pool.id %}">Visit session</a>
@@ -106,7 +106,7 @@
                             <p class="card-text font-weight-normal">
                                 Semester: {{ pool.subject.sem }} | Department: {{ pool.subject.dept }}
                             </p>
-                            <p class="card-text font-weight-normal">Pool Status: {{ pool.status }}</p>
+                            <p class="card-text font-weight-normal">Pool Status: {{ pool.is_alive }}</p>
                         </div>
                         <div class="card-body text-right">
                             <a class="btn btn-light" href="{% url 'student_pool_view' pk=pool.id %}">Visit session</a>
@@ -142,7 +142,7 @@
                           <p class="card-text font-weight-normal">
                               Semester: {{ pool.subject.sem }} | Department: {{ pool.subject.dept }}
                           </p>
-                          <p class="card-text font-weight-normal">Pool Status: {{ pool.status }}</p>
+                          <p class="card-text font-weight-normal">Pool Status: {{ pool.is_alive }}</p>
                       </div>
                       <div class="card-body text-right">
                           <a class="btn btn-light" href="{% url 'student_pool_view' pk=pool.id %}">Visit session</a>

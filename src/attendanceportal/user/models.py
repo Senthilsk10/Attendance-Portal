@@ -71,16 +71,23 @@ class attendance_pool(models.Model):
     is_alive = models.BooleanField(null=True,blank=False,default=True)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
-    datefield = models.DateField(auto_now=True)
+    datefield = models.DateField(auto_now_add=True)
 
 
-    
+    def pool_status(self):
+        if (self.is_alive == True):
+            return "true"
+        else:
+            return "false"
+
     def __str__(self):
         return f"{self.subject.subject_code} on {self.datefield}"
         pass
 
     def duration_display(self):
-        return f"{self.start_time.strftime('%H:%M')} - {self.end_time.strftime('%H:%M')}"
+        start_time_display = self.start_time.strftime('%I:%M %p')  # %I for 12-hour format, %p for AM/PM
+        end_time_display = self.end_time.strftime('%I:%M %p')
+        return f"{start_time_display} - {end_time_display}"
 
 class attendance(models.Model):
     pool = models.ForeignKey(attendance_pool,on_delete=models.CASCADE,blank=False,null=False)
