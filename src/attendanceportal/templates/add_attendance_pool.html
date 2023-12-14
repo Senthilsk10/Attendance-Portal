@@ -1,41 +1,88 @@
-<!-- your_template.html -->
-<form method="post" action="{% url 'add_atendance_pool' %}">
-    {% csrf_token %}
+{% extends 'base.html' %}
 
-    <!-- Start Time and End Time -->
-    <label for="start_time">Start Time:</label>
-    <input type="time" name="start_time" required>
-    <br>
-    <label for="end_time">End Time:</label>
-    <input type="time" name="end_time" required>
-    <br>
-    <label for="subject">Subject:</label>
-    <select name="subject" required>
-        {% for subject in subjects %}
-            <option value="{{ subject.id }}">{{ subject.subject_code }}</option>
-        {% endfor %}
-    </select>
-    <br>
+{% block jsscript %}
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+{% endblock %}
 
-    <!-- Other Fields from attendance_pool model -->
-    <!-- Recieved Attendance, Is Alive, Latitude, Longitude 
-    <label for="recieved_attendance">Recieved Attendance:</label>
-    <input type="number" name="recieved_attendance" required>-->
-    <br>
-    <label for="is_alive">Is Alive:</label>
-    <input type="checkbox" name="is_alive" checked>
-    <br>
-    <label for="latitude">Latitude:</label>
-    <input type="text" name="latitude">
-    <br>
-    <label for="longitude">Longitude:</label>
-    <input type="text" name="longitude">
-    <br>
+{% block content %}
 
-    <input type="hidden" name="created_by" value="{{ request.user.id }}">
-    <br>
+<div class  = "continer mx-2 my-2">
+    <div class = "container alert alert-warning" id = "location-info">
+
+    </div>
+
+</div>
+<hr class = "shadow my-4">
+<div class = "container text-center mt-5" id = "content">
+    <div class = "shadow-sm p-4 mt-5 mx-3 bg-white rounded">
+        <h1 class="h3 mb-2 font-weight-normal">Add a new session</h1>
+        <form method="post" action="{% url 'add_atendance_pool' %}" class = "form-signin p-2 ">
+            {% csrf_token %}
+            <div class="form-group my-3">
+                <label for="start_time" class = "sr-only my-2 fw-bold font-serif">Start time:</label>
+                <input type="time" name="start_time" required class = "form-control">
+            </div>
+            <div class="form-group my-3">
+                <label for="end_time" class = "sr-only my-2 fw-bold font-serif">End time:</label>
+                <input type="time" name="end_time" required class = "form-control">
+            </div>
+            <div class="form-group my-3">
+                <label for="subject" class = "sr-only my-2 fw-bold font-serif">Subject:</label>
+                <select name="subject" required class = "form-control">
+                    {% for subject in subjects %}
+                        <option value="{{ subject.id }}">{{ subject.subject_code }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group my-4">
+                    <label for="is_alive" class = "sr-only fw-bold font-serif ">Toogle to ON/OFF &nbsp;&nbsp; :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                    <input type="checkbox" name="is_alive" checked data-toggle = "toggle"> 
+            </div>
+            <input type="hidden" id="latitude">
+            <input type="hidden" id="longitude">
+            <input type="hidden" name="created_by" value="{{ request.user.id }}">
+            <input type="submit" value="Submit" class = "btn btn-primary shadow-sm btn-lg btn-block  mt-4 mb-4">
+        </form>
+    </div>
+</div>
 
 
+<script>
+    y = document.getElementById("location-info")
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+            document.getElementById("latitude").value = position.coords.latitude;
+            document.getElementById("longitude").value = position.coords.longitude;
+            y.innerHTML = "⚠️&nbsp;&nbsp;location coordinates have been taken  -  <br> your current location will be considered as the class location.&nbsp;&nbsp;⚠️";
+        }, showError);
+        } else { 
+            y.innerHTML = "Geolocation is not supported by this browser.";
+        }
+        }
+    
+        function showError(error) {
+          switch(error.code) {
+            case error.PERMISSION_DENIED:
+              y.innerHTML = "User denied the request for Geolocation.";
+              $("#content").hide();
+              break;
+            case error.POSITION_UNAVAILABLE:
+              y.innerHTML = "Location information is unavailable.";
+              $("#content").hide();
+              break;
+            case error.TIMEOUT:
+              y.innerHTML = "The request to get user location timed out.";
+              $("#content").hide();
+              break;
+            case error.UNKNOWN_ERROR:
+              y.innerHTML = "An unknown error occurred.";
+              $("#content").hide();
+              break;
+          }
+        }
+        getLocation();
+</script>
 
-    <input type="submit" value="Submit">
-</form>
+{% endblock %}
