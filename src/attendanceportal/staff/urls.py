@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import staffs,create_attendance_pool,staffs_pool_view,get_requests,post_attendance,delete_requests
+from .views import staffs,create_attendance_pool,staffs_pool_view,get_requests,post_attendance,delete_requests,turn_off
 
 
 urlpatterns = [
@@ -9,4 +9,5 @@ urlpatterns = [
     path("get_requests/<int:pk>/",get_requests,name = "get_requests"),
     path("addRequest/<int:pk>/",post_attendance,name = "addRequestByStaff"),
     path("delete_requests/<int:pk>/",delete_requests,name = "delete_requests"),
+    path("turn_off/<int:pk>/",turn_off,name = "turnoff"),
 ]

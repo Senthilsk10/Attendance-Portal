@@ -8,9 +8,7 @@
 {% endblock %}
 
 {% block login %}
-<a class="nav-item nav-link ml-3 pl-1 btn btn-light rounded-lg border-info shadow-sm" href="/"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
-  <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5"/>
-</svg> Home   </a>
+    <a class="nav-item nav-link ml-3 pl-2 btn btn-light rounded-lg border-info shadow-sm" href="{% url 'student' %}">Profile</a>
 {% endblock %}
 
 {% block content %}
@@ -129,7 +127,7 @@
           <form id="yourForm" class = "form">
             <select id="requestType" class = "form-control my-3">
                 <option class = "form-control" value="leave">Leave</option>
-                <option class = "form-control" value = lateAttendance">Late Attendance</option>
+                <option class = "form-control" value = "lateAttendance">Late Attendance</option>
             </select>
         
             <button type="button" id="submitButton" class = "btn btn-primary">Submit</button>
@@ -139,23 +137,17 @@
     
     <hr class = "shadow my-4">
 
-    <div class = "container my-3 mx-1">
+    <div class = "container my-3 mx-2 p-2">
 
-      <button id = "refresh-data" class = "btn btn-info p-2">Refresh table</button>
+      <button id = "refresh-data" class = "btn btn-sm btn-info p-1">Refresh table</button>
 
-      <div id = "table-content" class = "my-3 shadow-sm">
+      <div id = "table-content" class = "my-2 shadow-sm ">
       
       </div>
     </div>
 
 
-
         <script>
-          
-          $(document).ready(function () {
-            $('#datatable').DataTable();
-            $('.dataTables_length').addClass('bs-select');
-          });
           
 
           var status_str = {{ pool.pool_status }};
@@ -291,6 +283,7 @@
                 // Update the table with new data
                 //$('#attendance_result tbody').html(data.html_content);
                 $('#table-content').html(data.html_content);
+                $("#datatable").DataTable();
                 console.log(data.html_content)
               }
             });

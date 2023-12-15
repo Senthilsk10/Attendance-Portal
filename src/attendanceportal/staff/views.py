@@ -113,4 +113,11 @@ def delete_requests(request,*args,**kwargs):
         }
         return JsonResponse(data, status=200)
 
-    
+
+def turn_off(request,*args,**kwargs):
+    if request.method == "GET":
+        pk = kwargs.get("pk")
+        pool = attendance_pool.objects.get(id = pk)
+        pool.is_alive = False
+        pool.save()
+        return redirect("staffs_pool_view",pk = pk)

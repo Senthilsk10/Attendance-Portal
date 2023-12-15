@@ -1,7 +1,102 @@
 {% extends 'base.html' %}
 
+{% block jsscript %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" /> 
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+{% endblock %}
+
+{% block login %}
+    <a class="nav-item nav-link ml-3 pl-2 btn btn-light rounded-lg border-info shadow-sm" href="{% url 'staffs' %}">Profile</a>
+{% endblock %}
+
 {% block content %}
 
+<div class ="container  mr-3 mt-1 p-2  rounded">
+          
+  <div class="card-body mx-1 mt-1 shadow">
+    <h1 class="h3 mb-2 font-weight-normal card-title">SessionInformation</h1>
+    <hr>
+    <div class="row">
+      <div class="col-sm-3">
+        <p class="mb-0">Subject Name</p>
+      </div>
+      <div class="col-sm-9">
+        <p class="text-muted mb-0">{{pool.subject.subject_name}}</p>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-sm-3">
+        <p class="mb-0">Subject Code</p>
+      </div>
+      <div class="col-sm-9">
+        <p class="text-muted mb-0">{{pool.subject.subject_code}}</p>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-sm-3">
+        <p class="mb-0">Class timings</p>
+      </div>
+      <div class="col-sm-9">
+        <p class="text-muted mb-0">{{pool.duration_display}}</p>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-sm-3">
+        <p class="mb-0">Handling Staff</p>
+      </div>
+      <div class="col-sm-9">
+        <p class="text-muted mb-0">{{pool.subject.handling_staff.username}}</p>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-sm-3">
+        <p class="mb-0">Session date</p>
+      </div>
+      <div class="col-sm-9">
+        <p class="text-muted mb-0">{{pool.datefield}}</p>
+      </div>
+    </div>
+    <hr>
+    {% if pool.is_alive %}
+      <div class="row text-center>
+        <div class="col-sm-6">
+          <p class="mb-3 font-serif">pool status - Active</p>
+        </div>
+        <div class="col-sm-6">
+          <p class="text-muted mb-0"><a class = "btn btn-primary" href="{% url 'turnoff' pk=pool.id %}">Turn off</a></p>
+        </div>
+      </div>
+    <hr>
+  </div>
+  {% else %}
+    <div class="row ">
+      <div class="col-sm-6 ">
+        <p class="mb-0 text-muted">pool status - Inactive</p>
+      </div>
+    </div>
+  <hr>
+  </div>
+  {% endif %}
+</div>
+
+<hr class = "shadow my-4">
+
+    <div class = "container my-3 mx-2 p-2">
+
+      <button id = "refresh-data" class = "btn btn-sm btn-info p-1">Refresh table</button>
+
+      <div id = "table-content" class = "my-2 shadow-sm ">
+      
+      </div>
+    </div>
+<hr class = "shadow my-4">
+<!--
     <div>         
         <H2>{{pool}}</H2>
     </div>
@@ -44,7 +139,7 @@
         </div>
 
     </div>
-  
+--> 
     <script>
         var headers = {
               'X-CSRFToken': getCSRFToken()
@@ -57,8 +152,8 @@
               headers:headers,
               data:{"pk":pool_id},
               success: function (data) {
-              
-                $('#attendance_result tbody').html(data.html_content);
+                $('#table-content').html(data.html_content);
+                $("#datatable").DataTable();
                 console.log(data.html_content)
               }
             });
