@@ -64,21 +64,25 @@
     </div>
     <hr>
     {% if pool.is_alive %}
-      <div class="row text-center>
+      <div class="row text-center">
         <div class="col-sm-6">
           <p class="mb-3 font-serif">pool status - Active</p>
         </div>
         <div class="col-sm-6">
-          <p class="text-muted mb-0"><a class = "btn btn-primary" href="{% url 'turnoff' pk=pool.id %}">Turn off</a></p>
+          <p class="text-muted mb-0"><a class = "btn btn-danger" href="{% url 'turnoff' pk=pool.id %}">Turn off</a></p>
         </div>
       </div>
     <hr>
   </div>
   {% else %}
-    <div class="row ">
-      <div class="col-sm-6 ">
-        <p class="mb-0 text-muted">pool status - Inactive</p>
+    <div class="row text-center">
+      <div class="col-sm-6">
+        <p class="mb-3 font-serif">pool status - Inactive</p>
       </div>
+      <div class="col-sm-6">
+        <p class="text-muted mb-0"><a class = "btn btn-success" href="{% url 'turnon' pk=pool.id %}">Turn on</a></p>
+      </div>
+    </div>
     </div>
   <hr>
   </div>
@@ -87,8 +91,10 @@
 
 <hr class = "shadow my-4">
 
-    <div class = "container my-3 mx-2 p-2">
-
+    <div class = "container my-3 mx-2 p-2" id = "attendance table">
+      <div class = "mb-3">
+        <h6 class="font-weight-normal font-serif">View Recieved attendance for this session</h6>
+      </div>
       <button id = "refresh-data" class = "btn btn-sm btn-info p-1">Refresh table</button>
 
       <div id = "table-content" class = "my-2 shadow-sm ">
@@ -96,50 +102,25 @@
       </div>
     </div>
 <hr class = "shadow my-4">
-<!--
-    <div>         
-        <H2>{{pool}}</H2>
-    </div>
-    <div>
-        <h3>start time : {{pool.start_time}}, end time : {{pool.end_time}}</h3>
-    </div>
-    <div>
-        <h3>
-            pool id : {{pool.id}}
-        subject code : {{pool.subject.subject_code}}<br>
-        subject name : {{pool.subject.subject_name}}<br>
-        handled by : {{pool.subject.handling_staff.username}}<br>
-        </h3>
-    </div>
-        <br>
-        <br>
-        <hr>
 
-    <button id = "refresh-data">refresh</button>
-    <table id = "attendance_result">
-        <tr>
-            <th>student name</th>
-            <th>student rollno</th>
-            <th>status</th>
-            <th>timestamp</th>
-        </tr>
-        {% for data in result_data %}
-        <tr>
-            <td>{{data.user.username}}</td>
-            <td>{{data.user.userid}}</td>
-            <td>{{data.status}}</td>
-            <td>{{data.timestamp}}</td>
-        </tr>
-        {% endfor %}
-    </table>
-
-    <div id = "requestSection">
-        <div id = "poolRequests">
-            
+<div id = "requestSection" class = "container my-3  text-start">
+    <div class="accordion accordion-flush" id="accordionFlushExample">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingOne">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+            <h6 class="font-weight-normal">View Requests for this session</h6>
+          </button>
+        </h2>
+        <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+          <div class="accordion-body">
+              <div class="container" id = "poolRequests">    
+              </div>
+          </div>
         </div>
-
+      </div>
     </div>
---> 
+</div>
+
     <script>
         var headers = {
               'X-CSRFToken': getCSRFToken()
@@ -165,6 +146,9 @@
 
           $('#refresh-data').click(function () {
             updateTable();
+          });
+          $('#refresh-requests').click(function () {
+            updateRequests();
           });
 
 
@@ -217,3 +201,5 @@
     </script>
 
 {% endblock %}
+
+

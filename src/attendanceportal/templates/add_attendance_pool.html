@@ -41,8 +41,8 @@
                     <label for="is_alive" class = "sr-only fw-bold font-serif ">Toogle to ON/OFF &nbsp;&nbsp; :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
                     <input type="checkbox" name="is_alive" checked data-toggle = "toggle"> 
             </div>
-            <input type="hidden" id="latitude">
-            <input type="hidden" id="longitude">
+            <input type="hidden" id="latitude" name="latitude">
+            <input type="hidden" id="longitude" name="longitude">
             <input type="hidden" name="created_by" value="{{ request.user.id }}">
             <input type="submit" value="Submit" class = "btn btn-primary shadow-sm btn-lg btn-block  mt-4 mb-4">
         </form>
@@ -56,7 +56,9 @@
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
             document.getElementById("latitude").value = position.coords.latitude;
+            console.log(position.coords.latitude);
             document.getElementById("longitude").value = position.coords.longitude;
+            console.log(position.coords.longitude);
             y.innerHTML = "⚠️&nbsp;&nbsp;location coordinates have been taken  -  <br> your current location will be considered as the class location.&nbsp;&nbsp;⚠️";
         }, showError);
         } else { 

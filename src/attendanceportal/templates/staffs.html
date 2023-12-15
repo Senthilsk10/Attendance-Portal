@@ -3,16 +3,16 @@
 
 {% block jsscript %}
 <style>
-  /* Add this style block to your HTML or include it in your CSS file */
+  
 
   @media (max-width: 767px) {
       .card-title,
       .card-text {
-          font-size: 80%; /* Adjust the percentage based on your preference */
+          font-size: 80%; 
       }
 
       .btn {
-          font-size: 70%; /* Adjust the percentage based on your preference */
+          font-size: 70%;
       }
   }
 </style>
@@ -90,7 +90,6 @@
                             <p class="card-text font-weight-normal">
                                 Semester: {{ pool.subject.sem }} | Department: {{ pool.subject.dept }}
                             </p>
-                            <p class="card-text font-weight-normal">Pool Status: {{ pool.status }}</p>
                         </div>
                         <div class="card-body text-right">
                             <a class="btn btn-light" href="{% url 'staffs_pool_view' pk=pool.id %}">Visit session</a>
@@ -144,34 +143,8 @@
     </div>
 </div>
 
-
-
-
-
-
-
- <!--
-  {% for pool in pools %}
-
-  <h1>you have created a pool with id: {{pool.id}}</h1>
-  <h1>you have created a pool with created user: {{pool.created_by}}</h1>
-  <h1>you have created a pool for the subject: {{pool.subject.subject_code}}</h1>
-  <a href = "{% url 'staffs_pool_view' pk=pool.id %}">go to pool</a>
-  {% endfor %}
-<br>
-<hr>
-<br>
-<h3>pools created in this month</h3>
-  {% for pool in past_pools %}
-  <h1>you have created a pool with id: {{pool.id}}</h1>
-  <h1>you have created a pool with created user: {{pool.created_by}}</h1>
-  <h1>you have created a pool for the subject: {{pool.subject.subject_code}}</h1>
-  <a href = "{% url 'staffs_pool_view' pk=pool.id %}">go to pool</a>
-  {% endfor %}
-
-
-  <a href = '{% url 'add_atendance_pool' %}'>add a new pool here</a>
-
 {% endblock %}
 
--->
+
+
+

@@ -121,3 +121,11 @@ def turn_off(request,*args,**kwargs):
         pool.is_alive = False
         pool.save()
         return redirect("staffs_pool_view",pk = pk)
+
+def turn_on(request,*args,**kwargs):
+    if request.method == "GET":
+        pk = kwargs.get("pk")
+        pool = attendance_pool.objects.get(id = pk)
+        pool.is_alive = True
+        pool.save()
+        return redirect("staffs_pool_view",pk = pk)

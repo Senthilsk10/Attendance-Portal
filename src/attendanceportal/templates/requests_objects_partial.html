@@ -1,9 +1,12 @@
 {% for request in requests %}
-<div class="card" style="width: 24rem;">
-    <div class="card-body">
-        <h6 class="card-subtitle">request type: {{request.request_type}}</h6>
-        <h6 class="card-subtitle mb-2 text-muted">student name: {{request.user.username}}</h6>
-        <p class="card-text">student roll number: {{request.user.userid}}</p>
+<div class="card" style="width: 22rem;">
+    <div class="card-body text-start">
+        <h6 class="card-title mb-3 alert alert-info">{{request.request_type}}</h6>
+        <hr>
+        <p class="card-subtitle mb-2 text-muted">student name: {{request.user.username}}</hp>
+            <hr>
+        <p class="card-text text-muted mb-3">student roll number: {{request.user.userid}}</p>
+        <hr>
         <button type="button" class="btn btn-success accept-request"
                 value="{% url 'addRequestByStaff' pk=request.id %}">Accept</button>
         <button type="button" class="btn btn-danger reject-request"
