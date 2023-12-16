@@ -1,9 +1,102 @@
 {% extends 'base.html' %}
 
+{% block jsscript %}
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
+
+body, html {
+  height: 100%;
+  line-height: 1.8;
+}
+
+/* Full height image header */
+.bgimg-1 {
+  background-position: center;
+  background-size: cover;
+  background-image: url("https://i.pinimg.com/736x/0c/c5/ed/0cc5ed7ae6f3d7b44c4ce35d83599cca.jpg");
+  min-height: 100%;
+}
+
+.w3-bar .w3-button {
+  padding: 16px;
+}
+</style>
+{% endblock %}
 {% block login %}
     <a class="nav-item nav-link ml-3 pl-2 btn btn-light rounded-lg border-info shadow-sm" href="{% url 'login' %}">  login   </a>
 {% endblock %}
 {% block content %}
-      
+
+<!-- Header with full-height image -->
+<header class="bgimg-1 w3-display-container w3-grayscale-min" id="home">
+  <div class="w3-display-left w3-text-white" style="padding:48px">
+    <span class="w3-jumbo w3-hide-small">Smart Attendance Management System</span><br>
+    <span class="w3-xxlarge w3-hide-large w3-hide-medium">Smart Attendance Management System</span><br>
+    <span class="w3-large">Say goodbye to time-consuming roll calls with our Smart Attendance Management System featuring secure location verification.</span>
+    <p><a href="{% url 'login' %}" class="w3-button w3-white w3-padding-large w3-large w3-margin-top w3-opacity w3-hover-opacity-off">start today</a></p>
+  </div> 
+ 
+</header>
+
+<!-- Team Section -->
+<div class="w3-container" style="padding:128px 16px" id="team">
+  <h3 class="w3-center">WHY CHOOSE US</h3>
+  <p class="w3-center w3-large">key fetures of the app</p>
+  <div class="w3-row-padding w3-grayscale" style="margin-top:64px">
+    <div class="w3-col l3 m6 w3-margin-bottom">
+      <div class="w3-card">
+        <img src="https://clockly.com/images/blog/employee-time-tracking-app.png?v=1687156903347972497" alt="John" style="width:100%">
+        <div class="w3-container">
+          <h3>Remote Attendance Marking<h3>
+          <p class="w3-opacity">Efficiency:</p>
+          <p>Teachers can create session instances effortlessly on our user-friendly web platform. Students, in turn, can mark their attendance remotely, saving time and reducing the hassle of traditional methods.</p>
+          
+        </div>
+      </div>
+    </div>
+    <div class="w3-col l3 m6 w3-margin-bottom">
+      <div class="w3-card">
+        <img src="https://dcoderesearch.com/storage/2022/05/address-verification-b01-v02-min.png" alt="John" style="width:100%">
+        <div class="w3-container">
+          <h3>Location-Based Verification:<h3>
+          <p class="w3-opacity">Accuracy:</p>
+          <p>Worried about attendance fraud? Our system has you covered. Each session is linked to a specific location, ensuring that students can only mark their presence when physically present in the designated classroom. No more unauthorized attendance!</p>
+          
+        </div>
+      </div>
+    </div>
+    <div class="w3-col l3 m6 w3-margin-bottom">
+      <div class="w3-card">
+        <img src="https://img.freepik.com/premium-vector/access-restricted-blocked-mobile-cell-phone-online-icon-graphic-smartphone-unauthorized-internet_101884-2446.jpg" alt="John" style="width:100%">
+        <div class="w3-container">
+          <h3>IP Address Blocking:<h3>
+          <p class="w3-opacity">Security:</p>
+          <p>To add an extra layer of security, we employ IP address blocking. This prevents any misuse by ensuring that a single device cannot be used to mark attendance for multiple individuals, enhancing the integrity of the attendance data..</p>
+          
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="w3-center w3-black w3-padding-64">
+  <a href="#home" class="w3-button w3-light-grey"><i class="fa fa-arrow-up w3-margin-right"></i>To the top</a>
+  <p class = "mt-3">See the work on Github</p>
+  <div class="w3-xlarge w3-section">
+    
+    <a href = "https://github.com/Senthilsk10/Attendance-Portal"><i class="fa fa-github w3-hover-opacity"></i></a>
+
+    
+  </div>
+  <p>Made for FEAT-annamalai University &nbsp;&nbsp;<a href="https://annamalaiuniversity.ac.in/index.php" title="W3.CSS" target="_blank" class="w3-hover-text-green">FEAT- AU</a></p>
+</footer>
+
+
 {% endblock %}
 
