@@ -137,7 +137,7 @@ def search_pools(request,*args,**kwargs):
         date = request.GET.get("search")
         text = request.GET.get('text')
         if date is not None and text is not None:
-            result_pools = attendance_pool.objects.filter(Q(datefield=date) | Q(subject__subject_name=text))
+            result_pools = attendance_pool.objects.filter(Q(datefield=date) | Q(subject__subject_name=text),created_by = request.user)
             html_content = render_to_string('pools_partial.html', {'pools': result_pools},request)
         else:
             html_content = render_to_string('no_search.html',{'message':"not a valid request"},request)
