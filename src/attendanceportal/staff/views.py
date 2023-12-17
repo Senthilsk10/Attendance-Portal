@@ -6,6 +6,7 @@ from django.utils import timezone
 from datetime import timedelta
 from student.views import get_client_ip
 from django.template.loader import render_to_string
+from django.db.models import Q
 
 # to calculate the recent data and past data for separate view
 today = timezone.now().date()
@@ -129,3 +130,17 @@ def turn_on(request,*args,**kwargs):
         pool.is_alive = True
         pool.save()
         return redirect("staffs_pool_view",pk = pk)
+
+
+def search_pools(request,*args,**kwargs):
+    if request.method == "GET":
+        date = request.GET.get("search")
+        text = request.GET.get('text')
+        if date is not None and text is not None:
+            result_pools = attendance_pool.objects.filter(Q(datefield=date) | Q(subject__subject_name=text))
+            html_content = render_to_string('pools_partial.html', {'pools': result_pools},request)
+        else:
+            html_content = render_to_string('no_search.html',{'message':"not a valid request"},request)
+        return JsonResponse({'html_content': html_content})
+    else:
+        return JsonResponse("post requests not allowed",status = 400)

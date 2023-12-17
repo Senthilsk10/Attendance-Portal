@@ -66,7 +66,24 @@
 
     <hr class = "shadow my-4" >
 
+    <div class = "container my-3">
+      <div class = "container" id = "search">
+        <h3 class = "font-weight-bold font-serif ">Search for a specififc sesion here</h3>
+        <div id = "form" class = "form text-center">
+          <input type = "date" id = "searchDate" class = "form-control">
+          <br>
+          <input type  = "text" id = "SearchText" class = "form-control">
+          <br>
+          <button class = "btn btn-info mt-3 mb-2 text-muted" id = "searchBtn">Seacrh</button>
 
+        </div>
+        <div id = "searchResult" class = "container mt-2">
+
+        </div>
+      </div>
+    </div>
+
+    <hr class = "shadow my-4" >
 
     <div class="accordion accordion-flush" id="accordionFlushExample">
       <div class="accordion-item">
@@ -98,9 +115,9 @@
                 </div>
                 {% endfor %}
             </div>    
+              </div>
           </div>
         </div>
-      </div>
     
     
       <div class="accordion-item">
@@ -142,6 +159,45 @@
         </div>
     </div>
 </div>
+
+
+  <script>
+    var headers = {
+              'X-CSRFToken': getCSRFToken()
+            };
+    function updateSearch() {
+      var searchDate = $("#searchDate").val();
+      var textvalue = $('#SearchText').val();
+      if (isValidDate(searchDate)) {
+          var url = '{% url "search_pools" %}' + '?search=' + searchDate + '&text=' + textvalue;
+          console.log(url);
+      } else {
+        $('#searchResult').html(`<div class = "container my-2">
+    <h4 class = "alert alert-warning">please provide valid date</h4>
+</div>`);
+          // Handle the case where the date is not valid, or you can choose to do nothing
+      };
+            $.ajax({
+              url: url,
+              type: 'GET',
+              headers:headers,
+              success: function (data) {
+                $('#searchResult').html(data.html_content);
+                console.log(data.html_content)
+              }
+            });
+          }
+
+          $("#searchBtn").click(function () {
+            updateSearch();
+          });
+
+          function isValidDate(dateString) {
+              // This regex pattern checks for the format YYYY-MM-DD
+              var dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+              return dateRegex.test(dateString);
+          }
+  </script>
 
 {% endblock %}
 
