@@ -31,7 +31,7 @@ This project is an Attendance Portal designed for staff members to efficiently m
 Demo
 The Attendance Portal is live and accessible at https://smartattendancemanagement021.pythonanywhere.com/.
 
-Screenshots
+Screenshots:
 Explore the screenshots of the site for a visual overview. Click https://app.tango.us/app/workflow/Navigating-smartattendancemanagement021-pythonanywhere-com-1399947e9bd44fa7a3bcbe7a1bfe1849 to view the screenshots.
 
 
